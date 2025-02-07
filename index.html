@@ -3,243 +3,201 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Long Distance Love (SVG)</title>
+  <title>Long Distance Love</title>
   <style>
     body {
       margin: 0;
       background-color: #1a1a1a;
       overflow: hidden;
-      position: relative;
     }
   </style>
 </head>
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
     <defs>
-      <!-- Digital effects -->
-      <filter id="pixelate">
-        <feGaussianBlur stdDeviation="1" />
-        <feColorMatrix type="matrix"
-          values="1 0 0 0 0
-                  0 1 0 0 0
-                  0 0 1 0 0
-                  0 0 0 9 -4" />
-      </filter>
-
-      <!-- Gradients for heart glow - RED BEACON COLOR -->
-      <radialGradient id="heartGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" style="stop-color:#ff0000;stop-opacity:0.8" />
-        <stop offset="100%" style="stop-color:#ff0000;stop-opacity:0" />
+      <!-- Ambient Glow Gradient for Silhouettes -->
+      <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="lavender" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="purple" stop-opacity="0"/>
       </radialGradient>
-
-      <!-- Digital rose petal shape -->
+      <!-- Glow Filter for Delicate Sparkles -->
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+        <feMerge>
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+      <!-- Digital Rose Petal Shape -->
       <path id="digitalPetal" d="M0,0 C-2,-2 -8,-15 0,-20 C8,-15 2,-2 Z" />
-
-      <!-- Particle motion path for connection -->
-      <path id="particlePath" d="M150,200 C300,180 500,220 650,200" fill="none" />
     </defs>
-
-    <!-- Background digital grid -->
-    <g opacity="0.1">
-      <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-        <path d="M20,0 L0,0 L0,20" fill="none" stroke="#4169E1" stroke-width="0.5" />
-      </pattern>
-      <rect width="800" height="400" fill="url(#grid)">
-        <animate attributeName="opacity"
-                 values="0.1;0.2;0.1"
-                 dur="20s" <!-- Slowed down grid animation -->
-                 repeatCount="indefinite"/>
-      </rect>
+    
+    <!-- Background -->
+    <rect x="0" y="0" width="800" height="400" fill="#1a1a1a" />
+    
+    <!-- Ambient Glows Behind the Silhouettes -->
+    <circle cx="150" cy="200" r="50" fill="url(#ambientGlow)" opacity="0">
+      <animate attributeName="opacity" from="0" to="1" dur="3s" begin="0s" fill="freeze" />
+    </circle>
+    <circle cx="650" cy="200" r="50" fill="url(#ambientGlow)" opacity="0">
+      <animate attributeName="opacity" from="0" to="1" dur="3s" begin="0s" fill="freeze" />
+    </circle>
+    
+    <!-- Left Minimalist Silhouette (Sender) -->
+    <g id="leftSilhouette" transform="translate(150,200)" opacity="0">
+      <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z" fill="#aaa" />
+      <animate attributeName="opacity" from="0" to="1" dur="2s" begin="0s" fill="freeze" />
     </g>
-
-    <!-- Falling petals in the background -->
-    <g id="fallingPetals">
-      <use href="#digitalPetal" transform="translate(50, -20)" fill="#f48fb1">
-        <animateMotion dur="30s" path="M0,0 L0,440" repeatCount="indefinite" /> <!-- Slowed down petals -->
-      </use>
-      <use href="#digitalPetal" transform="translate(200, -30)" fill="#f48fb1">
-        <animateMotion dur="36s" path="M0,0 L0,440" repeatCount="indefinite" /> <!-- Slowed down petals -->
-      </use>
-      <use href="#digitalPetal" transform="translate(350, -10)" fill="#f48fb1">
-        <animateMotion dur="40s" path="M0,0 L0,440" repeatCount="indefinite" /> <!-- Slowed down petals -->
-      </use>
-      <use href="#digitalPetal" transform="translate(500, -25)" fill="#f48fb1">
-        <animateMotion dur="34s" path="M0,0 L0,440" repeatCount="indefinite" /> <!-- Slowed down petals -->
-      </use>
-      <use href="#digitalPetal" transform="translate(650, -15)" fill="#f48fb1">
-        <animateMotion dur="38s" path="M0,0 L0,440" repeatCount="indefinite" /> <!-- Slowed down petals -->
-      </use>
+    
+    <!-- Right Minimalist Silhouette (Recipient) -->
+    <g id="rightSilhouette" transform="translate(650,200)" opacity="0">
+      <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z" fill="#aaa" />
+      <animate attributeName="opacity" from="0" to="1" dur="2s" begin="0s" fill="freeze" />
     </g>
-
-    <!-- Left silhouette with pixelation effect -->
-    <g transform="translate(150,200)" filter="url(#pixelate)">
-      <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z"
-            fill="#eee" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;0.8"
-                 dur="2s" <!-- Slowed down silhouette appear -->
-                 fill="freeze"/>
-        <animate attributeName="transform"
-                 values="scale(0.98);scale(1);scale(0.98)"
-                 dur="6s" <!-- Slowed down silhouette pulse -->
-                 repeatCount="indefinite"/>
+    
+    <!-- Digital Connection Line (Shimmering in Lavender) -->
+    <path id="connectionLine" d="M170,200 L630,200" stroke="lavender" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="30s" repeatCount="indefinite" />
+      <animate attributeName="stroke-dashoffset" from="0" to="20" dur="30s" repeatCount="indefinite" />
+    </path>
+    
+    <!-- Initial Floating Hearts/Sparkles Around the Sender -->
+    <g id="floatingHearts">
+      <path d="M0,0 C0,-5 5,-10 10,-10 C15,-10 15,0 10,5 L5,10 L0,5 Z" fill="pink" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" keyTimes="0;0.5;1" dur="5s" begin="0s" repeatCount="indefinite" />
+        <animateMotion dur="5s" repeatCount="indefinite">
+          <mpath>
+            <path d="M150,190 Q140,170 150,150" />
+          </mpath>
+        </animateMotion>
       </path>
-      <!-- Left heart pulse - RED BEACON HEART BEAT -->
-      <circle cx="0" cy="-110" r="0" fill="url(#heartGlow)">
-        <animate attributeName="r"
-                 values="0;30;0"  <!-- Red Beacon pulse pattern -->
-                 dur="1.5s"      <!-- Faster pulse for beacon effect -->
-                 begin="2s"
-                 repeatCount="indefinite"/>
-      </circle>
-    </g>
-
-    <!-- Right silhouette with pixelation effect -->
-    <g transform="translate(650,200)" filter="url(#pixelate)">
-      <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z"
-            fill="#eee" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;0.8"
-                 dur="2s"  <!-- Slowed down silhouette appear -->
-                 fill="freeze"/>
-        <animate attributeName="transform"
-                 values="scale(0.98);scale(1);scale(0.98)"
-                 dur="6s"  <!-- Slowed down silhouette pulse -->
-                 begin="1s"
-                 repeatCount="indefinite"/>
-      </path>
-      <!-- Right heart glow upon reception - RED BEACON HEART BEAT -->
-      <circle cx="0" cy="-110" r="0" fill="url(#heartGlow)">
-        <animate attributeName="r"
-                 values="0;30;0"  <!-- Red Beacon pulse pattern -->
-                 dur="1.5s"      <!-- Faster pulse for beacon effect -->
-                 begin="9s"
-                 repeatCount="indefinite"/>
-      </circle>
-    </g>
-
-    <!-- Digital connection line with layered dash animations -->
-    <g>
-      <path d="M200,200 L600,200" stroke="#81d4fa" stroke-width="1" stroke-dasharray="4,4" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;0.5;0.5;0"
-                 dur="20s"  <!-- Slowed down connection line animation -->
-                 keyTimes="0;0.1;0.9;1"
-                 repeatCount="indefinite"/>
-        <animate attributeName="stroke-dashoffset"
-                 values="0;100"
-                 dur="16s"  <!-- Slowed down dash offset -->
-                 repeatCount="indefinite"/>
-      </path>
-      <path d="M200,197 L600,197" stroke="#81d4fa" stroke-width="0.5" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;0.3;0.3;0"
-                 dur="20s"  <!-- Slowed down connection line animation -->
-                 keyTimes="0;0.15;0.85;1"
-                 repeatCount="indefinite"/>
+      <path d="M0,0 C0,-5 5,-10 10,-10 C15,-10 15,0 10,5 L5,10 L0,5 Z" fill="pink" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" keyTimes="0;0.5;1" dur="5s" begin="1s" repeatCount="indefinite" />
+        <animateMotion dur="5s" repeatCount="indefinite">
+          <mpath>
+            <path d="M150,195 Q135,175 150,155" />
+          </mpath>
+        </animateMotion>
       </path>
     </g>
-
-    <!-- Digital rose: a journey of love (wrapped in a group to apply a constant 180° rotation) -->
-    <g id="digitalRoseWrapper">
-      <!-- Translation animation with a freeze (pause) in the middle:
-           Moves from (150,200) to (400,200) in 7.5s, freezes (remains at 400,200) for 5s, then continues to (650,200) -->
-      <animateTransform id="roseTranslationAnim" attributeName="transform" type="translate" <!-- Added ID for animation -->
-                        values="150 200; 400 200; 400 200; 650 200"
-                        keyTimes="0;0.375;0.625;1"
-                        dur="40s" begin="2s" repeatCount="indefinite"/> <!-- Slowed down rose journey -->
-      <!-- Inner group rotates the rose by 180° so it isn’t upside down -->
-      <g> <!-- Removed rotate(180) to fix flower orientation -->
-        <!-- Rose stem with fading opacity -->
-        <path d="M0,0 L0,-40" stroke="#50C878" stroke-width="2" opacity="0">
-          <animate attributeName="opacity"
-                   values="0;0;1;1;0"
-                   dur="40s"  <!-- Slowed down stem animation -->
-                   keyTimes="0;0.375;0.4;0.6;1"
-                   repeatCount="indefinite"/>
+    
+    <!-- Rose Container: The Entire Rose Journey -->
+    <g id="roseContainer" transform="translate(150,200)">
+      <!-- Rose Group (hidden until 5s) -->
+      <g id="roseGroup" opacity="0">
+        <!-- 1. Rose Birth & Growth (5s–12s) -->
+        <!-- A Tiny Glowing Bud Near the Sender -->
+        <circle id="roseBud" cx="0" cy="0" r="2" fill="white" filter="url(#glow)">
+          <animate attributeName="r" values="2;8" dur="7s" begin="5s" fill="freeze" />
+          <animate attributeName="fill" values="white;lavender" dur="7s" begin="5s" fill="freeze" />
+          <animate attributeName="opacity" from="0" to="1" dur="1s" begin="5s" fill="freeze" />
+        </circle>
+        <!-- Stem Growth with a Gentle Sway (starts at 6s) -->
+        <path id="roseStem" d="M0,0 C2,-20 -2,-40 0,-60" stroke="lightgreen" stroke-width="2" fill="none" opacity="0">
+          <animate attributeName="opacity" from="0" to="1" dur="1s" begin="6s" fill="freeze" />
+          <animate attributeName="stroke-dasharray" from="0,100" to="100,0" dur="3s" begin="6s" fill="freeze" />
+          <animateTransform attributeName="transform" type="rotate" values="0;2;0" dur="3s" begin="6s" repeatCount="indefinite" />
         </path>
-        <!-- Rose petals group -->
-        <g transform="translate(0,-40)">
-          <g filter="url(#pixelate)">
-            <!-- First petal with subtle rotation and scale bloom -->
-            <g>
-              <use href="#digitalPetal" fill="#f48fb1" opacity="0">
-                <animate attributeName="opacity"
-                         values="0;0;1;1;0"
-                         dur="40s"  <!-- Slowed down petal animation -->
-                         keyTimes="0;0.38;0.42;0.58;1"
-                         repeatCount="indefinite"/>
-                <animateTransform attributeName="transform"
-                                  type="scale"
-                                  values="0;1.2"
-                                  dur="4s"  <!-- Slowed down petal scale -->
-                                  begin="6s"
-                                  repeatCount="indefinite"/>
-              </use>
-              <animateTransform attributeName="transform"
-                                type="rotate"
-                                from="0" to="360"
-                                dur="40s"  <!-- Slowed down petal rotation -->
-                                begin="6s"
-                                repeatCount="indefinite"/>
-            </g>
-            <!-- Additional static petals at various angles -->
-            <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(72)">
-              <animate attributeName="opacity"
-                       values="0;0;1;1;0"
-                       dur="40s"  <!-- Slowed down petal animation -->
-                       keyTimes="0;0.39;0.43;0.57;1"
-                       repeatCount="indefinite"/>
-            </use>
-            <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(144)">
-              <animate attributeName="opacity"
-                       values="0;0;1;1;0"
-                       dur="40s"  <!-- Slowed down petal animation -->
-                       keyTimes="0;0.40;0.44;0.56;1"
-                       repeatCount="indefinite"/>
-            </use>
-            <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(216)">
-              <animate attributeName="opacity"
-                       values="0;0;1;1;0"
-                       dur="40s"  <!-- Slowed down petal animation -->
-                       keyTimes="0;0.41;0.45;0.55;1"
-                       repeatCount="indefinite"/>
-            </use>
-            <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(288)">
-              <animate attributeName="opacity"
-                       values="0;0;1;1;0"
-                       dur="40s"  <!-- Slowed down petal animation -->
-                       keyTimes="0;0.42;0.46;0.54;1"
-                       repeatCount="indefinite"/>
-            </use>
-          </g>
+        <!-- Leaves Unfurling Gracefully -->
+        <path id="roseLeafLeft" d="M-3,-30 C-10,-25 -10,-35 -3,-30" stroke="lightgreen" stroke-width="1" fill="lightgreen" opacity="0">
+          <animate attributeName="opacity" from="0" to="1" dur="1s" begin="7s" fill="freeze" />
+        </path>
+        <path id="roseLeafRight" d="M3,-30 C10,-25 10,-35 3,-30" stroke="lightgreen" stroke-width="1" fill="lightgreen" opacity="0">
+          <animate attributeName="opacity" from="0" to="1" dur="1s" begin="7.5s" fill="freeze" />
+        </path>
+        <!-- Petals Blooming One by One -->
+        <g id="rosePetals" transform="translate(0,-60)">
+          <use href="#digitalPetal" fill="pink" opacity="0" transform="scale(0)">
+            <animate attributeName="opacity" from="0" to="1" dur="1s" begin="8s" fill="freeze" />
+            <animateTransform attributeName="transform" type="scale" values="0;1" dur="1s" begin="8s" fill="freeze" />
+          </use>
+          <use href="#digitalPetal" fill="pink" opacity="0" transform="rotate(72) scale(0)">
+            <animate attributeName="opacity" from="0" to="1" dur="1s" begin="8.5s" fill="freeze" />
+            <animateTransform attributeName="transform" type="scale" values="0;1" dur="1s" begin="8.5s" fill="freeze" />
+          </use>
+          <use href="#digitalPetal" fill="pink" opacity="0" transform="rotate(144) scale(0)">
+            <animate attributeName="opacity" from="0" to="1" dur="1s" begin="9s" fill="freeze" />
+            <animateTransform attributeName="transform" type="scale" values="0;1" dur="1s" begin="9s" fill="freeze" />
+          </use>
+          <use href="#digitalPetal" fill="pink" opacity="0" transform="rotate(216) scale(0)">
+            <animate attributeName="opacity" from="0" to="1" dur="1s" begin="9.5s" fill="freeze" />
+            <animateTransform attributeName="transform" type="scale" values="0;1" dur="1s" begin="9.5s" fill="freeze" />
+          </use>
+          <use href="#digitalPetal" fill="pink" opacity="0" transform="rotate(288) scale(0)">
+            <animate attributeName="opacity" from="0" to="1" dur="1s" begin="10s" fill="freeze" />
+            <animateTransform attributeName="transform" type="scale" values="0;1" dur="1s" begin="10s" fill="freeze" />
+          </use>
         </g>
+        <!-- Glowing Sparkles Around the Bud -->
+        <circle cx="0" cy="-60" r="1" fill="lavender" opacity="0">
+          <animate attributeName="opacity" values="0;1;0" dur="2s" begin="8s" repeatCount="3" />
+          <animateMotion dur="2s" begin="8s" repeatCount="3">
+            <mpath>
+              <path d="M0,0 L5,5" />
+            </mpath>
+          </animateMotion>
+        </circle>
+        
+        <!-- Make the Rose Group Visible -->
+        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="5s" fill="freeze" />
+        
+        <!-- 2. Digital Journey (12s–20s): The Rose Floats Across -->
+        <animateTransform attributeName="transform" type="translate"
+                          values="0,0;500,0" dur="8s" begin="12s" fill="freeze" />
+        <!-- Gentle Rotation as it Travels -->
+        <animateTransform attributeName="transform" type="rotate"
+                          values="0;10;0" dur="8s" begin="12s" additive="sum" repeatCount="indefinite" />
+        <!-- Sparkles Trailing the Rose -->
+        <g id="roseSparkles">
+          <circle cx="-10" cy="0" r="1" fill="lavender" opacity="0">
+            <animate attributeName="opacity" values="0;1;0" dur="1s" begin="13s" repeatCount="3" />
+          </circle>
+          <circle cx="-20" cy="5" r="1" fill="lavender" opacity="0">
+            <animate attributeName="opacity" values="0;1;0" dur="1s" begin="14s" repeatCount="3" />
+          </circle>
+        </g>
+        
+        <!-- 3. Arrival & Blooming (20s–26s) -->
+        <!-- The Rose Slows Near the Recipient -->
+        <animateTransform attributeName="transform" type="translate"
+                          values="500,0;500,0" dur="0.1s" begin="20s" fill="freeze" />
+        <!-- Dramatic Bloom: Petals Expand and Glow -->
+        <animateTransform xlink:href="#rosePetals" attributeName="transform" type="scale"
+                          values="1;1.2" dur="1s" begin="20s" fill="freeze" />
+        <!-- Burst of Sparkles -->
+        <circle cx="0" cy="-60" r="2" fill="lavender" opacity="0">
+          <animate attributeName="r" from="2" to="8" dur="0.5s" begin="21s" fill="freeze" />
+          <animate attributeName="opacity" from="1" to="0" dur="0.5s" begin="21s" fill="freeze" />
+        </circle>
+        
+        <!-- 4. Cycle Completion (26s–30s): Petals Drift Away & Fade -->
+        <animateTransform attributeName="transform" type="translate"
+                          values="500,0;520,-10" dur="4s" begin="26s" fill="freeze" />
+        <animate attributeName="opacity" from="1" to="0" dur="4s" begin="26s" fill="freeze" />
       </g>
     </g>
-
-
-    <!-- Freeze overlay: in the middle, everything "freezes" and a message appears -->
-    <g id="freezeOverlay">
-      <rect x="0" y="0" width="800" height="400" fill="black" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;1;1;0"
-                 keyTimes="0;0.375;0.625;1"
-                 dur="40s"  <!-- Slowed down freeze overlay animation -->
-                 begin="roseTranslationAnim.end" fill="freeze"/> <!-- Message after rose reaches end -->
-      </rect>
-      <text x="400" y="200" text-anchor="middle" fill="white" font-size="32" opacity="0">
-        Happy Rose Day!
-        <animate attributeName="opacity"
-                 values="0;1;1;0"
-                 keyTimes="0;0.375;0.625;1"
-                 dur="40s"  <!-- Slowed down message animation -->
-                 begin="roseTranslationAnim.end" fill="freeze"/> <!-- Message after rose reaches end -->
-      </text>
+    
+    <!-- 5. Recipient’s Response: A Glowing Halo and a Pulsing Heart -->
+    <g id="arrivalResponse" transform="translate(650,200)" opacity="0">
+      <circle cx="0" cy="-110" r="30" fill="none" stroke="lavender" stroke-width="2" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" dur="3s" begin="21s" fill="freeze" />
+      </circle>
+      <path d="M0,0 
+               C-3,-5 -8,-5 -10,0 
+               C-12,5 -8,10 0,15 
+               C8,10 12,5 10,0 
+               C8,-5 3,-5 0,0 Z" fill="pink" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="1s" begin="22s" fill="freeze" />
+        <animateTransform attributeName="transform" type="scale"
+                          values="1;1.2;1" dur="1s" begin="22s" repeatCount="indefinite" />
+      </path>
+      <animate attributeName="opacity" from="0" to="1" dur="1s" begin="21s" fill="freeze" />
     </g>
-
-    <!-- Faint title text to evoke the theme -->
-    <text x="400" y="380" text-anchor="middle" fill="#fff" font-size="18" opacity="0.2">
-    </text>
+    
+    <!-- Overall Fade Out for a Seamless Loop (28s–30s) -->
+    <rect x="0" y="0" width="800" height="400" fill="black" opacity="0">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.93;1" dur="30s" repeatCount="indefinite" />
+    </rect>
   </svg>
 </body>
 </html>
