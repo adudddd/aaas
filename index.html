@@ -1,222 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Long Distance Love (SVG)</title>
-    <style>
-        body { margin: 0; background-color: #1a1a1a; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Long Distance Love (SVG)</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #1a1a1a;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
 </head>
 <body>
-
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
     <defs>
-        <!-- Digital effects -->
-        <filter id="pixelate">
-            <feGaussianBlur stdDeviation="1" />
-            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 9 -4"/>
-        </filter>
+      <!-- Digital effects -->
+      <filter id="pixelate">
+        <feGaussianBlur stdDeviation="1" />
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 9 -4" />
+      </filter>
 
-        <!-- Gradients -->
-        <radialGradient id="heartGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:0.7"/>
-            <stop offset="100%" style="stop-color:#FF69B4;stop-opacity:0"/>
-        </radialGradient>
+      <!-- Gradients for heart glow -->
+      <radialGradient id="heartGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:0.7" />
+        <stop offset="100%" style="stop-color:#FF69B4;stop-opacity:0" />
+      </radialGradient>
 
-        <!-- Digital rose petal -->
-        <path id="digitalPetal" d="M0,0 C-2,-2 -8,-15 0,-20 C8,-15 2,-2 Z" />
+      <!-- Digital rose petal shape -->
+      <path id="digitalPetal" d="M0,0 C-2,-2 -8,-15 0,-20 C8,-15 2,-2 Z" />
 
-        <!-- Particle effects path -->
-        <path id="particlePath" d="M150,200 C300,180 500,220 650,200" fill="none"/>
+      <!-- Particle motion path -->
+      <path id="particlePath" d="M150,200 C300,180 500,220 650,200" fill="none" />
     </defs>
 
     <!-- Background digital grid -->
     <g opacity="0.1">
-        <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M20,0 L0,0 L0,20" fill="none" stroke="#4169E1" stroke-width="0.5"/>
-        </pattern>
-        <rect width="800" height="400" fill="url(#grid)">
-            <animate attributeName="opacity"
-                     values="0.1;0.2;0.1"
-                     dur="10s"
-                     repeatCount="indefinite"/>
-        </rect>
+      <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M20,0 L0,0 L0,20" fill="none" stroke="#4169E1" stroke-width="0.5" />
+      </pattern>
+      <rect width="800" height="400" fill="url(#grid)">
+        <animate attributeName="opacity"
+                 values="0.1;0.2;0.1"
+                 dur="10s"
+                 repeatCount="indefinite" />
+      </rect>
     </g>
 
     <!-- Left silhouette with pixelation effect -->
     <g transform="translate(150,200)" filter="url(#pixelate)">
-        <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z"
-              fill="#eee" opacity="0">
-            <animate attributeName="opacity"
-                     values="0;0.8"
-                     dur="1s"
-                     fill="freeze"/>
-            <animate attributeName="transform"
-                     values="scale(0.98);scale(1);scale(0.98)"
-                     dur="3s"
-                     repeatCount="indefinite"/>
-        </path>
-        <!-- Left heart glow -->
-        <circle cx="0" cy="-110" r="0" fill="url(#heartGlow)">
-            <animate attributeName="r"
-                     values="0;30;20;25;20;0"
-                     dur="3s"
-                     begin="1s"
-                     repeatCount="indefinite"/>
-        </circle>
+      <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z"
+            fill="#eee" opacity="0">
+        <animate attributeName="opacity"
+                 values="0;0.8"
+                 dur="1s"
+                 fill="freeze" />
+        <animate attributeName="transform"
+                 values="scale(0.98);scale(1);scale(0.98)"
+                 dur="3s"
+                 repeatCount="indefinite" />
+      </path>
+      <!-- Left heart pulse -->
+      <circle cx="0" cy="-110" r="0" fill="url(#heartGlow)">
+        <animate attributeName="r"
+                 values="0;30;20;25;20;0"
+                 dur="3s"
+                 begin="1s"
+                 repeatCount="indefinite" />
+      </circle>
     </g>
 
-    <!-- Right silhouette -->
+    <!-- Right silhouette with pixelation effect -->
     <g transform="translate(650,200)" filter="url(#pixelate)">
-        <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z"
-              fill="#eee" opacity="0">
-            <animate attributeName="opacity"
-                     values="0;0.8"
-                     dur="1s"
-                     fill="freeze"/>
-            <animate attributeName="transform"
-                     values="scale(0.98);scale(1);scale(0.98)"
-                     dur="3s"
-                     begin="0.5s"
-                     repeatCount="indefinite"/>
-        </path>
+      <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z"
+            fill="#eee" opacity="0">
+        <animate attributeName="opacity"
+                 values="0;0.8"
+                 dur="1s"
+                 fill="freeze" />
+        <animate attributeName="transform"
+                 values="scale(0.98);scale(1);scale(0.98)"
+                 dur="3s"
+                 begin="0.5s"
+                 repeatCount="indefinite" />
+      </path>
+      <!-- Right heart glow upon reception -->
+      <circle cx="0" cy="-110" r="0" fill="url(#heartGlow)">
+        <animate attributeName="r"
+                 values="0;0;30;20;0"
+                 dur="3s"
+                 begin="8s"
+                 repeatCount="indefinite" />
+      </circle>
     </g>
 
-    <!-- Digital connection line with multiple layers -->
+    <!-- Digital connection line with layered dash animations -->
     <g>
-        <path d="M200,200 L600,200" stroke="#81d4fa" stroke-width="1" stroke-dasharray="4,4" opacity="0">
-            <animate attributeName="opacity"
-                     values="0;0.5;0.5;0"
-                     dur="10s"
-                     keyTimes="0;0.1;0.9;1"
-                     repeatCount="indefinite"/>
-            <animate attributeName="stroke-dashoffset"
-                     values="0;100"
-                     dur="8s"
-                     repeatCount="indefinite"/>
-        </path>
-        <!-- Additional connection lines with different patterns -->
-        <path d="M200,197 L600,197" stroke="#81d4fa" stroke-width="0.5" opacity="0">
-            <animate attributeName="opacity"
-                     values="0;0.3;0.3;0"
-                     dur="10s"
-                     keyTimes="0;0.15;0.85;1"
-                     repeatCount="indefinite"/>
-        </path>
+      <path d="M200,200 L600,200" stroke="#81d4fa" stroke-width="1" stroke-dasharray="4,4" opacity="0">
+        <animate attributeName="opacity"
+                 values="0;0.5;0.5;0"
+                 dur="10s"
+                 keyTimes="0;0.1;0.9;1"
+                 repeatCount="indefinite" />
+        <animate attributeName="stroke-dashoffset"
+                 values="0;100"
+                 dur="8s"
+                 repeatCount="indefinite" />
+      </path>
+      <path d="M200,197 L600,197" stroke="#81d4fa" stroke-width="0.5" opacity="0">
+        <animate attributeName="opacity"
+                 values="0;0.3;0.3;0"
+                 dur="10s"
+                 keyTimes="0;0.15;0.85;1"
+                 repeatCount="indefinite" />
+      </path>
     </g>
 
-    <!-- Digital rose animation -->
+    <!-- Digital rose: a journey of love -->
     <g id="digitalRose" transform="translate(150,200)">
-        <!-- Rose stem -->
-        <path d="M0,0 L0,-40" stroke="#50C878" stroke-width="2" opacity="0">
+      <!-- Animate the entire rose along the digital connection -->
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        from="150 200"
+                        to="650 200"
+                        dur="10s"
+                        begin="2s"
+                        repeatCount="indefinite" />
+
+      <!-- Rose stem with fading opacity -->
+      <path d="M0,0 L0,-40" stroke="#50C878" stroke-width="2" opacity="0">
+        <animate attributeName="opacity"
+                 values="0;0;1;1;0"
+                 dur="15s"
+                 keyTimes="0;0.2;0.3;0.8;1"
+                 repeatCount="indefinite" />
+      </path>
+
+      <!-- Rose petals group -->
+      <g transform="translate(0,-40)">
+        <g filter="url(#pixelate)">
+          <!-- First petal with subtle rotation and scale bloom -->
+          <g transform="rotate(0)">
+            <use href="#digitalPetal" fill="#f48fb1" opacity="0">
+              <animate attributeName="opacity"
+                       values="0;0;1;1;0"
+                       dur="15s"
+                       keyTimes="0;0.3;0.4;0.8;1"
+                       repeatCount="indefinite" />
+              <animateTransform attributeName="transform"
+                                type="scale"
+                                values="0;1.2"
+                                dur="2s"
+                                begin="3s"
+                                repeatCount="indefinite" />
+            </use>
+            <animateTransform attributeName="transform"
+                              type="rotate"
+                              from="0"
+                              to="360"
+                              dur="15s"
+                              begin="3s"
+                              repeatCount="indefinite" />
+          </g>
+
+          <!-- Additional static petals at various angles -->
+          <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(72)">
             <animate attributeName="opacity"
                      values="0;0;1;1;0"
                      dur="15s"
-                     keyTimes="0;0.2;0.3;0.8;1"
-                     repeatCount="indefinite"/>
-            <animateTransform attributeName="transform"
-                             type="translate"
-                             values="0,0; 500,0"
-                             dur="10s"
-                             begin="2s"
-                             repeatCount="indefinite"
-                             attributeName="transform"/>
-        </path>
-
-        <!-- Digital rose petals -->
-        <g transform="translate(0,-40)">
-            <!-- Multiple layers of pixelated petals -->
-            <g filter="url(#pixelate)">
-                <use href="#digitalPetal" fill="#f48fb1" opacity="0">
-                    <animate attributeName="opacity"
-                             values="0;0;1;1;0"
-                             dur="15s"
-                             keyTimes="0;0.3;0.4;0.8;1"
-                             repeatCount="indefinite"/>
-                    <animateTransform attributeName="transform"
-                                     attributeName="transform"
-                                     type="scale"
-                                     values="0;1.2"
-                                     dur="2s"
-                                     begin="3s"
-                                     repeatCount="indefinite"/>
-                </use>
-                <!-- Add more petals at different angles -->
-                <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(72)">
-                    <animate attributeName="opacity"
-                             values="0;0;1;1;0"
-                             dur="15s"
-                             keyTimes="0;0.35;0.45;0.8;1"
-                             repeatCount="indefinite"/>
-                </use>
-                <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(144)">
-                    <animate attributeName="opacity"
-                             values="0;0;1;1;0"
-                             dur="15s"
-                             keyTimes="0;0.4;0.5;0.8;1"
-                             repeatCount="indefinite"/>
-                </use>
-                <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(216)">
-                    <animate attributeName="opacity"
-                             values="0;0;1;1;0"
-                             dur="15s"
-                             keyTimes="0;0.45;0.55;0.8;1"
-                             repeatCount="indefinite"/>
-                </use>
-                <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(288)">
-                    <animate attributeName="opacity"
-                             values="0;0;1;1;0"
-                             dur="15s"
-                             keyTimes="0;0.5;0.6;0.8;1"
-                             repeatCount="indefinite"/>
-                </use>
-            </g>
-             <animateTransform attributeName="transform"
-                             type="translate"
-                             values="0,0; 500,0"
-                             dur="10s"
-                             begin="2s"
-                             repeatCount="indefinite"
-                             attributeName="transform"/>
+                     keyTimes="0;0.35;0.45;0.8;1"
+                     repeatCount="indefinite" />
+          </use>
+          <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(144)">
+            <animate attributeName="opacity"
+                     values="0;0;1;1;0"
+                     dur="15s"
+                     keyTimes="0;0.4;0.5;0.8;1"
+                     repeatCount="indefinite" />
+          </use>
+          <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(216)">
+            <animate attributeName="opacity"
+                     values="0;0;1;1;0"
+                     dur="15s"
+                     keyTimes="0;0.45;0.55;0.8;1"
+                     repeatCount="indefinite" />
+          </use>
+          <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(288)">
+            <animate attributeName="opacity"
+                     values="0;0;1;1;0"
+                     dur="15s"
+                     keyTimes="0;0.5;0.6;0.8;1"
+                     repeatCount="indefinite" />
+          </use>
         </g>
+      </g>
     </g>
 
-    <!-- Particle effects -->
+    <!-- Particle effects along the connection -->
     <g>
-        <!-- Multiple particles following the path -->
-        <circle cx="0" cy="0" r="1.5" fill="#81d4fa">
-            <animateMotion dur="10s" begin="2s" repeatCount="indefinite">
-                <mpath href="#particlePath"/>
-            </animateMotion>
-            <animate attributeName="opacity"
-                     values="0;0.8;0"
-                     dur="2s"
-                     repeatCount="indefinite"/>
-        </circle>
-        <!-- Additional particles with different timings -->
-        <circle cx="0" cy="0" r="1" fill="#81d4fa">
-            <animateMotion dur="10s" begin="2.5s" repeatCount="indefinite">
-                <mpath href="#particlePath"/>
-            </animateMotion>
-            <animate attributeName="opacity"
-                     values="0;0.6;0"
-                     dur="1.5s"
-                     repeatCount="indefinite"/>
-        </circle>
+      <circle cx="0" cy="0" r="1.5" fill="#81d4fa">
+        <animateMotion dur="10s" begin="2s" repeatCount="indefinite">
+          <mpath href="#particlePath" />
+        </animateMotion>
+        <animate attributeName="opacity"
+                 values="0;0.8;0"
+                 dur="2s"
+                 repeatCount="indefinite" />
+      </circle>
+      <circle cx="0" cy="0" r="1" fill="#81d4fa">
+        <animateMotion dur="10s" begin="2.5s" repeatCount="indefinite">
+          <mpath href="#particlePath" />
+        </animateMotion>
+        <animate attributeName="opacity"
+                 values="0;0.6;0"
+                 dur="1.5s"
+                 repeatCount="indefinite" />
+      </circle>
     </g>
 
-    <!-- Right heart reveal -->
-    <g transform="translate(650,200)">
-        <circle cx="0" cy="-110" r="0" fill="url(#heartGlow)">
-            <animate attributeName="r"
-                     values="0;0;30;20;0"
-                     dur="3s"
-                     begin="8s"
-                     repeatCount="indefinite"/>
-        </circle>
-    </g>
-</svg>
-
+    <!-- Faint title text to evoke the theme -->
+    <text x="400" y="380" text-anchor="middle" fill="#fff" font-size="18" opacity="0.2">
+      Long Distance Love
+    </text>
+  </svg>
 </body>
 </html>
