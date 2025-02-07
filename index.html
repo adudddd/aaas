@@ -11,24 +11,9 @@
       overflow: hidden;
       position: relative;
     }
-    /* Creative button styling */
-    #extraPetalsButton {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 10px 20px;
-      background: #ff69b4;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      z-index: 10;
-    }
   </style>
 </head>
 <body>
-  <button id="extraPetalsButton">Click for Cuteness Overload</button>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
     <defs>
       <!-- Digital effects -->
@@ -41,7 +26,7 @@
                   0 0 0 9 -4" />
       </filter>
 
-      <!-- Gradients for heart glow -->
+      <!-- Gradient for heart glow -->
       <radialGradient id="heartGlow" cx="50%" cy="50%" r="50%">
         <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:0.7" />
         <stop offset="100%" style="stop-color:#FF69B4;stop-opacity:0" />
@@ -49,9 +34,6 @@
 
       <!-- Digital rose petal shape -->
       <path id="digitalPetal" d="M0,0 C-2,-2 -8,-15 0,-20 C8,-15 2,-2 Z" />
-      
-      <!-- Particle motion path for connection -->
-      <path id="particlePath" d="M150,200 C300,180 500,220 650,200" fill="none" />
     </defs>
 
     <!-- Background digital grid -->
@@ -65,25 +47,6 @@
                  dur="10s"
                  repeatCount="indefinite"/>
       </rect>
-    </g>
-
-    <!-- Falling petals in the background -->
-    <g id="fallingPetals">
-      <use href="#digitalPetal" transform="translate(50, -20)" fill="#f48fb1">
-        <animateMotion dur="15s" path="M0,0 L0,440" repeatCount="indefinite" />
-      </use>
-      <use href="#digitalPetal" transform="translate(200, -30)" fill="#f48fb1">
-        <animateMotion dur="18s" path="M0,0 L0,440" repeatCount="indefinite" />
-      </use>
-      <use href="#digitalPetal" transform="translate(350, -10)" fill="#f48fb1">
-        <animateMotion dur="20s" path="M0,0 L0,440" repeatCount="indefinite" />
-      </use>
-      <use href="#digitalPetal" transform="translate(500, -25)" fill="#f48fb1">
-        <animateMotion dur="17s" path="M0,0 L0,440" repeatCount="indefinite" />
-      </use>
-      <use href="#digitalPetal" transform="translate(650, -15)" fill="#f48fb1">
-        <animateMotion dur="19s" path="M0,0 L0,440" repeatCount="indefinite" />
-      </use>
     </g>
 
     <!-- Left silhouette with pixelation effect -->
@@ -109,7 +72,7 @@
       </circle>
     </g>
 
-    <!-- Right silhouette with pixelation effect -->
+    <!-- Right silhouette with pixelation effect and blinking red beacon -->
     <g transform="translate(650,200)" filter="url(#pixelate)">
       <path d="M-20,-60 C-30,-80 -20,-90 0,-90 C20,-90 30,-80 20,-60 L0,-30 Z"
             fill="#eee" opacity="0">
@@ -131,151 +94,85 @@
                  begin="8s"
                  repeatCount="indefinite"/>
       </circle>
+      <!-- Blinking red beacon mimicking a heartbeat -->
+      <circle cx="0" cy="-110" r="3" fill="red">
+        <animate attributeName="r" values="3;6;3" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.5;1" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"/>
+      </circle>
     </g>
 
-    <!-- Digital connection line with layered dash animations -->
-    <g>
-      <path d="M200,200 L600,200" stroke="#81d4fa" stroke-width="1" stroke-dasharray="4,4" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;0.5;0.5;0"
-                 dur="10s"
-                 keyTimes="0;0.1;0.9;1"
-                 repeatCount="indefinite"/>
-        <animate attributeName="stroke-dashoffset"
-                 values="0;100"
-                 dur="8s"
-                 repeatCount="indefinite"/>
-      </path>
-      <path d="M200,197 L600,197" stroke="#81d4fa" stroke-width="0.5" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;0.3;0.3;0"
-                 dur="10s"
-                 keyTimes="0;0.15;0.85;1"
-                 repeatCount="indefinite"/>
-      </path>
-    </g>
-
-    <!-- Digital rose: a journey of love (wrapped in a group to apply a constant 180° rotation) -->
-    <g id="digitalRoseWrapper">
-      <!-- Translation animation with a freeze (pause) in the middle:
-           Moves from (150,200) to (400,200) in 7.5s, freezes (remains at 400,200) for 5s, then continues to (650,200) -->
+    <!-- Digital rose: a journey of love -->
+    <!-- The rose starts at (150,200) and moves horizontally to (650,200) over 15s,
+         then freezes in place for 5s while the overlay appears. -->
+    <g id="digitalRoseWrapper" transform="translate(150,200)">
       <animateTransform attributeName="transform" type="translate"
-                        values="150 200; 400 200; 400 200; 650 200"
-                        keyTimes="0;0.375;0.625;1"
-                        dur="20s" begin="2s" repeatCount="indefinite"/>
-      <!-- Inner group rotates the rose by 180° so it isn’t upside down -->
-      <g transform="rotate(180)">
-        <!-- Rose stem with fading opacity -->
-        <path d="M0,0 L0,-40" stroke="#50C878" stroke-width="2" opacity="0">
+                        values="0 0; 500 0; 500 0"
+                        keyTimes="0;0.75;1"
+                        dur="20s" repeatCount="indefinite"/>
+      <!-- Flip vertically so the stem points down -->
+      <g transform="scale(1,-1)">
+        <!-- Rose stem -->
+        <path d="M0,0 L0,40" stroke="#50C878" stroke-width="2" opacity="0">
           <animate attributeName="opacity"
                    values="0;0;1;1;0"
-                   dur="20s"
-                   keyTimes="0;0.375;0.4;0.6;1"
-                   repeatCount="indefinite"/>
+                   keyTimes="0;0.75;0.78;0.97;1"
+                   dur="20s" repeatCount="indefinite"/>
         </path>
         <!-- Rose petals group -->
-        <g transform="translate(0,-40)">
+        <g transform="translate(0,40)">
           <g filter="url(#pixelate)">
-            <!-- First petal with subtle rotation and scale bloom -->
-            <g>
-              <use href="#digitalPetal" fill="#f48fb1" opacity="0">
-                <animate attributeName="opacity"
-                         values="0;0;1;1;0"
-                         dur="20s"
-                         keyTimes="0;0.38;0.42;0.58;1"
-                         repeatCount="indefinite"/>
-                <animateTransform attributeName="transform"
-                                  type="scale"
-                                  values="0;1.2"
-                                  dur="2s"
-                                  begin="3s"
-                                  repeatCount="indefinite"/>
-              </use>
+            <!-- Petals arranged in a circle -->
+            <use href="#digitalPetal" fill="#f48fb1" opacity="0">
+              <animate attributeName="opacity"
+                       values="0;0;1;1;0"
+                       keyTimes="0;0.75;0.78;0.97;1"
+                       dur="20s" repeatCount="indefinite"/>
               <animateTransform attributeName="transform"
-                                type="rotate"
-                                from="0" to="360"
-                                dur="20s"
+                                type="scale"
+                                values="0;1.2"
+                                dur="2s"
                                 begin="3s"
                                 repeatCount="indefinite"/>
-            </g>
-            <!-- Additional static petals at various angles -->
+            </use>
             <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(72)">
               <animate attributeName="opacity"
                        values="0;0;1;1;0"
-                       dur="20s"
-                       keyTimes="0;0.39;0.43;0.57;1"
-                       repeatCount="indefinite"/>
+                       keyTimes="0;0.75;0.78;0.97;1"
+                       dur="20s" repeatCount="indefinite"/>
             </use>
             <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(144)">
               <animate attributeName="opacity"
                        values="0;0;1;1;0"
-                       dur="20s"
-                       keyTimes="0;0.40;0.44;0.56;1"
-                       repeatCount="indefinite"/>
+                       keyTimes="0;0.75;0.78;0.97;1"
+                       dur="20s" repeatCount="indefinite"/>
             </use>
             <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(216)">
               <animate attributeName="opacity"
                        values="0;0;1;1;0"
-                       dur="20s"
-                       keyTimes="0;0.41;0.45;0.55;1"
-                       repeatCount="indefinite"/>
+                       keyTimes="0;0.75;0.78;0.97;1"
+                       dur="20s" repeatCount="indefinite"/>
             </use>
             <use href="#digitalPetal" fill="#f48fb1" opacity="0" transform="rotate(288)">
               <animate attributeName="opacity"
                        values="0;0;1;1;0"
-                       dur="20s"
-                       keyTimes="0;0.42;0.46;0.54;1"
-                       repeatCount="indefinite"/>
+                       keyTimes="0;0.75;0.78;0.97;1"
+                       dur="20s" repeatCount="indefinite"/>
             </use>
           </g>
         </g>
       </g>
     </g>
 
-    <!-- Extra falling petals triggered by button click -->
-    <g id="extraPetals" opacity="0">
-      <use href="#digitalPetal" transform="translate(100, -20)" fill="#ff99cc">
-        <animateMotion dur="4s" path="M0,0 L0,440" begin="extraPetalsButton.click" fill="freeze" />
-      </use>
-      <use href="#digitalPetal" transform="translate(300, -20)" fill="#ff99cc">
-        <animateMotion dur="4s" path="M0,0 L0,440" begin="extraPetalsButton.click+0.5s" fill="freeze" />
-      </use>
-      <use href="#digitalPetal" transform="translate(500, -20)" fill="#ff99cc">
-        <animateMotion dur="4s" path="M0,0 L0,440" begin="extraPetalsButton.click+1s" fill="freeze" />
-      </use>
-      <animate attributeName="opacity" 
-               values="0;1;0" 
-               keyTimes="0;0.5;1" 
-               dur="4s" 
-               begin="extraPetalsButton.click" 
-               fill="freeze" />
-    </g>
-
-    <!-- Freeze overlay: in the middle, everything "freezes" and a message appears -->
+    <!-- Freeze overlay: appears only after the rose reaches its destination (after 15s) -->
     <g id="freezeOverlay">
       <rect x="0" y="0" width="800" height="400" fill="black" opacity="0">
-        <animate attributeName="opacity"
-                 values="0;1;1;0"
-                 keyTimes="0;0.375;0.625;1"
-                 dur="20s"
-                 begin="2s"
-                 repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;1;0" keyTimes="0;0.75;0.95;1" dur="20s" repeatCount="indefinite"/>
       </rect>
       <text x="400" y="200" text-anchor="middle" fill="white" font-size="32" opacity="0">
         Happy Rose Day!
-        <animate attributeName="opacity"
-                 values="0;1;1;0"
-                 keyTimes="0;0.375;0.625;1"
-                 dur="20s"
-                 begin="2s"
-                 repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;1;0" keyTimes="0;0.75;0.95;1" dur="20s" repeatCount="indefinite"/>
       </text>
     </g>
-
-    <!-- Faint title text to evoke the theme -->
-    <text x="400" y="380" text-anchor="middle" fill="#fff" font-size="18" opacity="0.2">
-      Long Distance Love
-    </text>
   </svg>
 </body>
 </html>
