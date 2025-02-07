@@ -32,8 +32,10 @@
       <path id="digitalPetal" d="M0,0 C-2,-2 -8,-15 0,-20 C8,-15 2,-2 Z" />
     </defs>
     
-    <!-- Background -->
-    <rect x="0" y="0" width="800" height="400" fill="#1a1a1a" />
+    <!-- Background (with subtle color shift) -->
+    <rect id="backgroundRect" x="0" y="0" width="800" height="400" fill="#1a1a1a">
+      <animate attributeName="fill" values="#1a1a1a;#2a2a50;#1a1a1a" dur="30s" repeatCount="indefinite" />
+    </rect>
     
     <!-- Ambient Glows Behind the Silhouettes -->
     <circle cx="150" cy="200" r="50" fill="url(#ambientGlow)" opacity="0">
@@ -83,7 +85,7 @@
     
     <!-- Rose Container: The Entire Rose Journey -->
     <g id="roseContainer" transform="translate(150,200)">
-      <!-- Rose Group (hidden until 5s) -->
+      <!-- Rose Group (visible from 5s onward) -->
       <g id="roseGroup" opacity="0">
         <!-- 1. Rose Birth & Growth (5s–12s) -->
         <!-- A Tiny Glowing Bud Near the Sender -->
@@ -177,7 +179,7 @@
       </g>
     </g>
     
-    <!-- 5. Recipient’s Response: A Glowing Halo, a Pulsing Heart, and a Tender Kiss Mark -->
+    <!-- 5. Recipient’s Response: Glowing Halo, Pulsing Heart, & a Tender Kiss Mark -->
     <g id="arrivalResponse" transform="translate(650,200)" opacity="0">
       <circle cx="0" cy="-110" r="30" fill="none" stroke="lavender" stroke-width="2" opacity="0">
         <animate attributeName="opacity" values="0;1;0" dur="3s" begin="21s" fill="freeze" />
@@ -191,14 +193,175 @@
         <animateTransform attributeName="transform" type="scale"
                           values="1;1.2;1" dur="1s" begin="22s" repeatCount="indefinite" />
       </path>
-      <!-- Tender Kiss Mark: A small, animated kiss appears on the recipient’s cheek -->
-      <g id="kissMarkGroup" transform="translate(20,-80)">
-        <path d="M0,0 C-2,-2 -4,-2 -6,0 C-4,2 -2,2 0,0 Z" fill="red" opacity="0">
-          <animate attributeName="opacity" from="0" to="1" dur="1s" begin="23s" fill="freeze" />
-          <animate attributeName="opacity" from="1" to="0" dur="1s" begin="26s" fill="freeze" />
-        </path>
+      <!-- Tender Kiss Mark on the Recipient's Cheek -->
+      <g id="kissMarkGroup" transform="translate(20,-80)" opacity="0">
+        <path d="M0,0 C-2,-2 -4,-2 -6,0 C-4,2 -2,2 0,0 Z" fill="red" />
+        <animate attributeName="opacity" from="0" to="1" dur="1s" begin="23s" fill="freeze" />
+        <animate attributeName="opacity" from="1" to="0" dur="1s" begin="26s" fill="freeze" />
       </g>
       <animate attributeName="opacity" from="0" to="1" dur="1s" begin="21s" fill="freeze" />
+    </g>
+    
+    <!-- ================== Additional Easter Egg & Interactive Elements ================== -->
+    <g id="easterEggs">
+      <!-- Hidden Digital Symbols Along the Connection -->
+      <text x="250" y="195" font-size="16" fill="pink" opacity="0">
+        💌
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="5s" />
+      </text>
+      <text x="400" y="205" font-size="16" fill="pink" opacity="0">
+        💕
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="8s" />
+      </text>
+      <text x="550" y="195" font-size="16" fill="pink" opacity="0">
+        ✉️
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="11s" />
+      </text>
+      
+      <!-- Subtle Music Note Particles Floating With the Rose -->
+      <text x="300" y="150" font-size="18" fill="lavender" opacity="0">
+        ♪
+        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="12s" />
+        <animateMotion dur="4s" repeatCount="indefinite">
+          <mpath>
+            <path d="M300,150 Q320,130 340,150" />
+          </mpath>
+        </animateMotion>
+      </text>
+      <text x="350" y="160" font-size="18" fill="lavender" opacity="0">
+        ♫
+        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="14s" />
+        <animateMotion dur="4s" repeatCount="indefinite">
+          <mpath>
+            <path d="M350,160 Q370,140 390,160" />
+          </mpath>
+        </animateMotion>
+      </text>
+      
+      <!-- Tiny Digital Envelope That Opens Briefly as the Rose Passes -->
+      <g id="envelope" transform="translate(480,190)" opacity="0">
+        <rect x="0" y="0" width="20" height="14" fill="white" stroke="lavender" stroke-width="1" />
+        <polygon points="0,0 10,7 20,0" fill="lavender" />
+        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="15s" fill="freeze" />
+        <animate attributeName="opacity" from="1" to="0" dur="0.5s" begin="17s" fill="freeze" />
+      </g>
+      
+      <!-- Pixel-Art Style Heart Fragments -->
+      <polygon points="0,0 3,-3 6,0 3,3" fill="pink" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" dur="1s" begin="16s" repeatCount="indefinite" />
+        <animateTransform attributeName="transform" type="translate" values="480,200;490,210" dur="1s" begin="16s" repeatCount="indefinite" />
+      </polygon>
+    </g>
+    
+    <!-- ================== Environmental Interactions ================== -->
+    <g id="environment">
+      <!-- Soft Pixel Rain in the Background -->
+      <g id="pixelRain">
+        <rect x="10" y="0" width="2" height="10" fill="lavender" opacity="0.3">
+          <animate attributeName="y" from="0" to="400" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite" />
+        </rect>
+        <rect x="50" y="-20" width="2" height="10" fill="lavender" opacity="0.3">
+          <animate attributeName="y" from="-20" to="400" dur="3s" repeatCount="indefinite" begin="1s" />
+          <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite" begin="1s" />
+        </rect>
+        <rect x="90" y="-10" width="2" height="10" fill="lavender" opacity="0.3">
+          <animate attributeName="y" from="-10" to="400" dur="3s" repeatCount="indefinite" begin="2s" />
+          <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite" begin="2s" />
+        </rect>
+      </g>
+      
+      <!-- Quantum-like Digital Grid Warp -->
+      <g id="quantumGrid" opacity="0.5">
+        <rect x="0" y="0" width="800" height="400" fill="none" stroke="purple" stroke-width="0.5">
+          <animateTransform attributeName="transform" type="scale" values="1;1.05;1" dur="5s" repeatCount="indefinite" begin="12s" />
+        </rect>
+      </g>
+      
+      <!-- Microscopic Data Streams Around the Silhouettes -->
+      <g id="dataStreams">
+        <line x1="140" y1="220" x2="160" y2="240" stroke="cyan" stroke-width="1" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0;0.6" dur="4s" repeatCount="indefinite" begin="10s" />
+        </line>
+        <line x1="640" y1="220" x2="660" y2="240" stroke="cyan" stroke-width="1" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0;0.6" dur="4s" repeatCount="indefinite" begin="11s" />
+        </line>
+      </g>
+      
+      <!-- Tiny Firefly-like Digital Particles -->
+      <circle cx="200" cy="100" r="2" fill="yellow" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="5s" />
+        <animateMotion dur="3s" repeatCount="indefinite">
+          <mpath>
+            <path d="M200,100 Q210,110 220,100" />
+          </mpath>
+        </animateMotion>
+      </circle>
+    </g>
+    
+    <!-- ================== Sensory Layer ================== -->
+    <g id="sensory">
+      <!-- Abstract Sound Wave Visualizations -->
+      <path d="M100,300 Q120,280 140,300 T180,300" stroke="cyan" stroke-width="1" fill="none" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="13s" />
+      </path>
+      <!-- Soft Frequency Lines -->
+      <line x1="170" y1="195" x2="630" y2="195" stroke="cyan" stroke-width="0.5" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="14s" />
+      </line>
+      <!-- Mathematical Love Equation Fragments -->
+      <text x="400" y="50" font-size="14" fill="magenta" opacity="0">
+        E=mc² ♥
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="15s" />
+      </text>
+      <!-- Quantum Entanglement-like Thin Lines Connecting the Hearts -->
+      <line x1="150" y1="190" x2="650" y2="190" stroke="magenta" stroke-width="0.5" opacity="0">
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="16s" />
+      </line>
+      <!-- Brief Holographic Text Fragments -->
+      <text x="350" y="80" font-size="12" fill="lightblue" opacity="0">
+        Love=∞
+        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="17s" />
+      </text>
+    </g>
+    
+    <!-- ================== Meta-Narrative Elements ================== -->
+    <g id="metaNarrative">
+      <!-- Tiny Loading/Buffering Icon -->
+      <g id="loadingIcon" transform="translate(400,200)" opacity="0">
+        <circle cx="0" cy="0" r="5" fill="white" />
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" begin="18s" />
+      </g>
+      <!-- Signal Strength Indicator -->
+      <g id="signalStrength" transform="translate(650,100)" opacity="0">
+        <rect x="0" y="0" width="3" height="10" fill="lime">
+          <animate attributeName="height" values="10;20;10" dur="2s" repeatCount="indefinite" />
+        </rect>
+        <rect x="5" y="0" width="3" height="8" fill="lime">
+          <animate attributeName="height" values="8;16;8" dur="2s" repeatCount="indefinite" begin="0.5s" />
+        </rect>
+        <rect x="10" y="0" width="3" height="6" fill="lime">
+          <animate attributeName="height" values="6;12;6" dur="2s" repeatCount="indefinite" begin="1s" />
+        </rect>
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="18s" />
+      </g>
+      <!-- GPS-like Tracker -->
+      <text x="640" y="180" font-size="12" fill="white" opacity="0">
+        Distance: 500km
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="19s" />
+      </text>
+      <!-- Binary Code Transforming into Heart Shapes -->
+      <text x="100" y="350" font-size="12" fill="lime" opacity="0">
+        01001000 01100101 01100001 01110010 01110100
+        <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" begin="20s" />
+      </text>
+      <!-- Shadow Layers Suggesting Multiple Dimensions -->
+      <g id="shadowLayer" opacity="0.3">
+        <use href="#leftSilhouette" transform="translate(5,5)" />
+        <use href="#rightSilhouette" transform="translate(-5,5)" />
+        <animate attributeName="opacity" values="0.3;0.5;0.3" dur="3s" repeatCount="indefinite" begin="21s" />
+      </g>
     </g>
     
     <!-- Overall Fade Out for a Seamless Loop (28s–30s) -->
