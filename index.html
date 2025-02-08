@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connected Hearts - Advanced</title>
+  <title>Connected Hearts</title>
   <style>
     /* ------------------ CSS Variables ------------------ */
     :root {
@@ -33,9 +33,6 @@
       flex-direction: column;
       background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
       transition: filter 1s;
-    }
-    body.dimmed {
-      filter: brightness(0.5);
     }
     /* ------------------ Theme Switcher ------------------ */
     .theme-switcher {
@@ -278,23 +275,6 @@
       pointer-events: none;
       z-index: 5;
     }
-    /* ------------------ Thank You Overlay ------------------ */
-    #thankYouOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      opacity: 0;
-      transition: opacity 1s;
-      z-index: 300;
-    }
   </style>
 </head>
 <body aria-label="Connected Hearts Animation">
@@ -325,7 +305,7 @@
       <div class="bridge"></div>
       <div class="heart beating" id="rightHeart" aria-label="Right Heart"></div>
     </div>
-    <!-- Love Story Timeline (secret items: tap to reveal with code "mudduputti") -->
+    <!-- Love Story Timeline (secret items reveal on click) -->
     <div id="timeline">
       <div class="timeline-item secret" data-message="First Met:<br>11-01-2022">
         <span>Tap to reveal</span>
@@ -361,9 +341,6 @@
       </div>
     </div>
   </div>
-  
-  <!-- Thank You Overlay -->
-  <div id="thankYouOverlay">Thank you for everything ❤️</div>
   
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -422,23 +399,18 @@
         game();
       });
       
-      /***** Timeline Secret Reveal *****/
+      /***** Timeline Secret Reveal (simple click to reveal) *****/
       document.querySelectorAll('#timeline .timeline-item.secret').forEach(item => {
         item.addEventListener('click', () => {
-          let code = prompt("Enter secret code to reveal message:");
-          if (code && code.trim().toLowerCase() === "mudduputti") {
-            item.innerHTML = item.getAttribute("data-message");
-          } else {
-            alert("Incorrect code");
-          }
+          item.innerHTML = item.getAttribute("data-message");
         });
       });
       
       /***** Envelope Message Card Flip *****/
       document.getElementById('messageCard').addEventListener('click', () => {
-        document.getElementById('messageCard').classList.toggle('flipped');
-        setTimeout(() => { 
-          // Typewriter effect for message text
+        const card = document.getElementById('messageCard');
+        card.classList.toggle('flipped');
+        setTimeout(() => {
           const message = document.getElementById('messageText');
           const text = message.textContent;
           message.textContent = "";
@@ -446,7 +418,7 @@
           const interval = setInterval(() => {
             message.textContent += text.charAt(i);
             i++;
-            if(i >= text.length) clearInterval(interval);
+            if (i >= text.length) clearInterval(interval);
           }, 50);
         }, 400);
       });
@@ -613,13 +585,7 @@
         createFirework(touch.clientX, touch.clientY);
       }, { passive: true });
       
-      /***** Dim Animation & Thank You Overlay (after 25 seconds) *****/
-      setTimeout(() => {
-        document.body.classList.add('dimmed');
-        document.getElementById('thankYouOverlay').style.opacity = '1';
-      }, 25000);
-      
-      /***** Floating Symbols & Stars Interval *****/
+      /***** Floating Symbols Interval & Stars Creation *****/
       setInterval(createSymbol, 2000);
       createStars();
     });
