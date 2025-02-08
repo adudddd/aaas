@@ -186,12 +186,17 @@
       margin-bottom: 20px;
       color: white;
       font-size: 0.9rem;
-      cursor: pointer;
     }
     .timeline-item {
       text-align: center;
     }
-    .timeline-item span {
+    .timeline-item.secret {
+      cursor: pointer;
+      border: 1px dashed white;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    .timeline-item.secret span {
       display: block;
     }
     /* ------------------ Message Card & Envelope Animation ------------------ */
@@ -328,10 +333,10 @@
       <div class="bridge"></div>
       <div class="heart beating" id="rightHeart" aria-label="Right Heart"></div>
     </div>
-    <!-- Love Story Timeline (clickable to open envelope) -->
+    <!-- Love Story Timeline (secret items: tap to reveal with code "mudduputti") -->
     <div id="timeline">
-      <div class="timeline-item">
-        <span class="date">First Met:<br>11-01-2022</span>
+      <div class="timeline-item secret" data-message="First Met:<br>11-01-2022">
+        <span>Tap to reveal</span>
       </div>
       <div class="timeline-item">
         <span class="icon">🌹</span>
@@ -339,14 +344,14 @@
       <div class="timeline-item">
         <span class="icon">💍</span>
       </div>
-      <div class="timeline-item">
-        <span class="date">Proposal:<br>Gadhu did on<br>4-4-2022</span>
+      <div class="timeline-item secret" data-message="Proposal:<br>Gadhu did on<br>4-4-2022">
+        <span>Tap to reveal</span>
       </div>
       <div class="timeline-item">
         <span class="icon">🎉</span>
       </div>
-      <div class="timeline-item">
-        <span class="date">Anniversary:<br>11-01-2025 (3 years)</span>
+      <div class="timeline-item secret" data-message="Anniversary:<br>11-01-2025 (3 years)">
+        <span>Tap to reveal</span>
       </div>
     </div>
   </main>
@@ -356,7 +361,7 @@
     <div class="envelope">
       <div class="card-inner" id="messageCard" role="button" aria-label="Message Card">
         <div class="card-front">
-          <p>Tap to reveal</p>
+          <p>Tap to reveal a message</p>
         </div>
         <div class="card-back">
           <p id="messageText">Though miles apart, my heart proposes every beat.<br>Will you make it forever?</p>
@@ -529,10 +534,18 @@
       document.getElementById('messageCard').classList.toggle('flipped');
       setTimeout(() => { textEffects.typewriter(); }, 400);
     });
-    // Clicking the timeline also triggers the envelope flip.
-    document.getElementById('timeline').addEventListener('click', () => {
-      document.getElementById('messageCard').classList.toggle('flipped');
-      setTimeout(() => { textEffects.typewriter(); }, 400);
+    // (Timeline items are handled separately below.)
+    
+    /***** Timeline Secret Reveal *****/
+    document.querySelectorAll('#timeline .timeline-item.secret').forEach(item => {
+      item.addEventListener('click', () => {
+        const code = prompt("Enter secret code to reveal message:");
+        if (code === "mudduputti") {
+          item.innerHTML = item.getAttribute("data-message");
+        } else {
+          alert("Incorrect code");
+        }
+      });
     });
     
     /***** WebGL Fluid Background (Experimental using Three.js) *****/
@@ -619,13 +632,13 @@
     
     /***** Mini-Games (Placeholders) *****/
     const miniGames = {
-      catchLove: () => { alert('Catch falling hearts game coming soon!,after 1 year'); },
-      matchSymbols: () => { alert('Memory matching game coming soon! after 2 year'); },
-      drawHeart: () => { alert('Draw heart challenge coming soon!, after 3 year'); }
+      catchLove: () => { alert('Catch falling hearts game coming soon!'); },
+      matchSymbols: () => { alert('Memory matching game coming soon!'); },
+      drawHeart: () => { alert('Draw heart challenge coming soon!'); }
     };
     document.querySelector('.mini-games').addEventListener('click', () => {
       const gameNames = Object.keys(miniGames);
-      const game = miniGames[gameNames[Math.floor(Math.random()*gameNames.length)]];
+      const game = miniGames[gameNames[Math.floor(Math.random() * gameNames.length)]];
       game();
     });
     
