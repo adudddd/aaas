@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connected Hearts - Advanced</title>
-  <style>
-    /* ------------------ CSS Variables ------------------ */
+  <title>Connected Hearts - Interactive</title>
+  <style>    /* ------------------ CSS Variables ------------------ */
     :root {
       --heart-color: #ff4b6e;
       --heart-glow: #ff8da1;
@@ -305,8 +304,7 @@
     }
   </style>
 </head>
-<body aria-label="Connected Hearts Animation">
-  <!-- WebGL Canvas for Fluid Background (Experimental) -->
+<body aria-label="Connected Hearts Animation">  <!-- WebGL Canvas for Fluid Background (Experimental) -->
   <canvas id="webgl-canvas" style="position: fixed; top: 0; left:0; width: 100%; height: 100%; z-index:0;"></canvas>
   
   <!-- Theme Switcher -->
@@ -372,13 +370,14 @@
   
   <!-- Thank You Overlay (hidden until dimmed) -->
   <div id="thankYouOverlay">Thank you for everything ❤️</div>
-  
   <script>
+    // Wait for the DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', () => {
-      /***** Theme Switcher *****/
+      // Theme Switcher - Fixed Implementation
       const themes = {
         day: {
           '--heart-color': '#ff4b6e',
+          '--heart-glow': '#ff8da1',
           '--bg-gradient-1': '#87cefa',
           '--bg-gradient-2': '#f0e68c',
           '--bridge-start': '#ff69b4',
@@ -386,283 +385,136 @@
         },
         night: {
           '--heart-color': '#ff4b6e',
+          '--heart-glow': '#ff8da1',
           '--bg-gradient-1': '#1a0f2e',
           '--bg-gradient-2': '#2d0f24',
           '--bridge-start': '#ff69b4',
           '--bridge-end': '#ffd700'
         },
         valentine: {
-          '--heart-color': '#ff4b6e',
-          '--bg-gradient-1': '#1a0f2e',
-          '--bg-gradient-2': '#2d0f24',
+          '--heart-color': '#ff1493',
+          '--heart-glow': '#ff69b4',
+          '--bg-gradient-1': '#ff69b4',
+          '--bg-gradient-2': '#ff1493',
           '--bridge-start': '#ff69b4',
-          '--bridge-end': '#ffd700'
+          '--bridge-end': '#ff1493'
         },
         cosmic: {
           '--heart-color': '#ad7cff',
+          '--heart-glow': '#7b2cbf',
           '--bg-gradient-1': '#0f1a2e',
           '--bg-gradient-2': '#222',
           '--bridge-start': '#7b2cbf',
           '--bridge-end': '#ff8da1'
         }
       };
-      function applyTheme(themeName) {
+
+      // Fixed theme switcher functionality
+      const applyTheme = (themeName) => {
         const theme = themes[themeName];
-        for (let key in theme) {
-          document.documentElement.style.setProperty(key, theme[key]);
-        }
-      }
-      document.querySelectorAll('.theme-switcher button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          applyTheme(btn.getAttribute('data-theme'));
+        Object.entries(theme).forEach(([key, value]) => {
+          document.documentElement.style.setProperty(key, value);
         });
-      });
-      
-      /***** Starry Background *****/
-      function createStars() {
-        const starsContainer = document.querySelector('.stars');
-        for (let i = 0; i < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--star-count')); i++) {
-          const star = document.createElement('div');
-          star.className = 'star';
-          const size = Math.random() * 3;
-          star.style.width = size + 'px';
-          star.style.height = size + 'px';
-          star.style.left = Math.random() * 100 + '%';
-          star.style.top = Math.random() * 100 + '%';
-          star.style.setProperty('--star-duration', (Math.random() * 3 + 2) + 's');
-          starsContainer.appendChild(star);
-        }
-      }
-      
-      /***** Floating Symbols with Particle Trails *****/
-      function createSymbol() {
-        const symbols = ['❤️', '💍', '🌸', '✨'];
-        const symbol = document.createElement('div');
-        symbol.className = 'symbol';
-        symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        symbol.style.left = Math.random() * 100 + '%';
-        symbol.style.top = '100%';
-        document.body.appendChild(symbol);
-        const animation = symbol.animate([
-          { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-          { transform: 'translateY(-100vh) rotate(360deg)', opacity: 0 }
-        ], {
-          duration: 5000,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
-        });
-        animation.onfinish = () => symbol.remove();
-      }
-      
-      /***** Interactive Ripples on Click *****/
-      function createRipple(x, y) {
-        const ripple = document.createElement('div');
-        ripple.classList.add('ripple');
-        ripple.style.left = (x - 25) + 'px';
-        ripple.style.top = (y - 25) + 'px';
-        ripple.style.width = '50px';
-        ripple.style.height = '50px';
-        document.body.appendChild(ripple);
-        ripple.addEventListener('animationend', () => {
-          ripple.remove();
-        });
-      }
-      document.addEventListener('click', (e) => {
-        createRipple(e.clientX, e.clientY);
-      });
-      
-      /***** Constellation Effect: Connect Floating Symbols *****/
-      function connectSymbols() {
-        const svg = document.getElementById('constellation-svg');
-        svg.innerHTML = ''; // Clear previous lines
-        const symbols = document.querySelectorAll('.symbol');
-        const threshold = 150;
-        symbols.forEach(sym1 => {
-          const rect1 = sym1.getBoundingClientRect();
-          symbols.forEach(sym2 => {
-            if (sym1 === sym2) return;
-            const rect2 = sym2.getBoundingClientRect();
-            const dx = rect1.left - rect2.left;
-            const dy = rect1.top - rect2.top;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < threshold) {
-              const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-              line.setAttribute('x1', rect1.left + rect1.width / 2);
-              line.setAttribute('y1', rect1.top + rect1.height / 2);
-              line.setAttribute('x2', rect2.left + rect2.width / 2);
-              line.setAttribute('y2', rect2.top + rect2.height / 2);
-              line.setAttribute('stroke', 'white');
-              line.setAttribute('stroke-width', '1');
-              line.setAttribute('stroke-opacity', (1 - dist / threshold).toString());
-              svg.appendChild(line);
-            }
-          });
-        });
-      }
-      setInterval(connectSymbols, 1000);
-      
-      /***** Customizable Text Effects for Message *****/
-      const textEffects = {
-        glitter: () => {
-          const message = document.getElementById('messageText');
-          message.style.backgroundImage = 'linear-gradient(90deg, #fff, #ff0, #fff)';
-          message.style.backgroundSize = '200%';
-          message.style.animation = 'glitter 2s infinite';
-        },
-        typewriter: () => {
-          const message = document.getElementById('messageText');
-          const text = message.textContent;
-          message.textContent = '';
-          let i = 0;
-          const interval = setInterval(() => {
-            message.textContent += text.charAt(i);
-            i++;
-            if(i === text.length) clearInterval(interval);
-          }, 50);
-        },
-        fadeInOut: () => {
-          const message = document.getElementById('messageText');
-          message.style.opacity = 0;
-          setTimeout(() => {
-            message.style.transition = 'opacity 1s';
-            message.style.opacity = 1;
-          }, 500);
-        }
       };
-      
-      /***** Envelope & Timeline: Click to Flip Message Card *****/
-      // Clicking the envelope (message card) triggers the flip & typewriter effect.
-      document.getElementById('messageCard').addEventListener('click', () => {
-        document.getElementById('messageCard').classList.toggle('flipped');
-        setTimeout(() => { textEffects.typewriter(); }, 400);
+
+      // Add click listeners to theme buttons
+      document.querySelectorAll('.theme-switcher button').forEach(button => {
+        button.addEventListener('click', () => {
+          const themeName = button.getAttribute('data-theme');
+          applyTheme(themeName);
+        });
       });
-      // Timeline secret items: Tap to reveal with secret code "mudduputti".
-      document.querySelectorAll('#timeline .timeline-item.secret').forEach(item => {
+
+      // Fixed timeline reveal functionality
+      document.querySelectorAll('.timeline-item.secret').forEach(item => {
         item.addEventListener('click', () => {
           const code = prompt("Enter secret code to reveal message:");
           if (code === "mudduputti") {
-            item.innerHTML = item.getAttribute("data-message");
-          } else {
-            alert("Incorrect code");
+            const message = item.getAttribute('data-message');
+            item.innerHTML = message;
+          } else if (code !== null) { // Only show alert if user didn't click cancel
+            alert("Incorrect code. Try again!");
           }
         });
       });
-      
-      /***** WebGL Fluid Background (Experimental using Three.js) *****/
-      function initWebGL() {
-        const canvas = document.getElementById('webgl-canvas');
-        if (!window.THREE) {
-          const script = document.createElement('script');
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-          script.onload = initWebGL;
-          document.head.appendChild(script);
-          return;
-        }
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        const geometry = new THREE.PlaneGeometry(20, 20, 32, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff4b6e, wireframe: true });
-        const plane = new THREE.Mesh(geometry, material);
-        scene.add(plane);
-        camera.position.z = 5;
-        function animate() {
-          requestAnimationFrame(animate);
-          plane.rotation.z += 0.005;
-          renderer.render(scene, camera);
-        }
-        animate();
+
+      // Fixed message card flip functionality
+      const messageCard = document.getElementById('messageCard');
+      if (messageCard) {
+        messageCard.addEventListener('click', () => {
+          messageCard.classList.toggle('flipped');
+        });
       }
-      initWebGL();
-      
-      /***** Object Pooling for Particles (Simplified Example) *****/
-      class Particle {
-        constructor() {
-          this.el = document.createElement('div');
-          this.el.className = 'firework';
+
+      // Mini-games functionality
+      const miniGames = {
+        catchLove: () => {
+          alert('Catch the Love Hearts!\nClick hearts as they fall to score points.\nGame coming soon!');
+        },
+        matchSymbols: () => {
+          alert('Match the Love Symbols!\nFind matching pairs of love symbols.\nGame coming soon!');
+        },
+        drawHeart: () => {
+          alert('Draw the Perfect Heart!\nUse your mouse/finger to draw a heart.\nGame coming soon!');
         }
-        init(x, y, color) {
-          this.el.style.left = x + 'px';
-          this.el.style.top = y + 'px';
-          this.el.style.backgroundColor = color;
-          this.el.style.transform = `rotate(0deg) scale(1)`;
-          document.body.appendChild(this.el);
-          this.animate();
-        }
-        animate() {
-          this.el.animate([
-            { transform: 'scale(1)', opacity: 1 },
-            { transform: 'scale(30)', opacity: 0 }
-          ], { duration: 1000, easing: 'ease-out' });
-          setTimeout(() => { this.el.remove(); }, 1000);
-        }
+      };
+
+      // Add click listener to mini-games button
+      const miniGamesButton = document.querySelector('.mini-games');
+      if (miniGamesButton) {
+        miniGamesButton.addEventListener('click', () => {
+          const games = Object.values(miniGames);
+          const randomGame = games[Math.floor(Math.random() * games.length)];
+          randomGame();
+        });
       }
-      class ParticlePool {
-        constructor(size) {
-          this.particles = Array(size).fill().map(() => new Particle());
-          this.index = 0;
+
+      // Create stars background
+      const createStars = () => {
+        const starsContainer = document.querySelector('.stars');
+        if (starsContainer) {
+          const starCount = 100;
+          for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDuration = `${2 + Math.random() * 3}s`;
+            starsContainer.appendChild(star);
+          }
         }
-        getParticle(x, y, color) {
-          const particle = this.particles[this.index];
-          particle.init(x, y, color);
-          this.index = (this.index + 1) % this.particles.length;
-        }
-      }
-      const particlePool = new ParticlePool(50);
-      
-      /***** Fireworks Using Particle Pool *****/
-      function createFirework(x, y) {
-        const colors = ['#ff4b6e', '#ffd700', '#ff69b4', '#ff8da1'];
-        for (let i = 0; i < 36; i++) {
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          particlePool.getParticle(x, y, color);
-        }
-      }
+      };
+
+      // Initialize stars
+      createStars();
+
+      // Add heart click effects
       document.querySelectorAll('.heart').forEach(heart => {
-        heart.addEventListener('click', () => {
+        heart.addEventListener('click', (e) => {
+          // Create ripple effect
           const rect = heart.getBoundingClientRect();
-          createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          createRipple(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          
+          // Toggle beating animation
+          heart.classList.toggle('beating');
         });
       });
-      document.addEventListener('touchstart', (e) => {
-        const touch = e.touches[0];
-        createFirework(touch.clientX, touch.clientY);
-      }, { passive: true });
-      
-      /***** Mini-Games (Placeholders) *****/
-      const miniGames = {
-        catchLove: () => { alert('Catch falling hearts game coming soon!'); },
-        matchSymbols: () => { alert('Memory matching game coming soon!'); },
-        drawHeart: () => { alert('Draw heart challenge coming soon!'); }
-      };
-      document.querySelector('.mini-games').addEventListener('click', () => {
-        const gameNames = Object.keys(miniGames);
-        const game = miniGames[gameNames[Math.floor(Math.random() * gameNames.length)]];
-        game();
-      });
-      
-      /***** Seasonal/Holiday Special Effects *****/
-      function detectHoliday() {
-        const date = new Date();
-        // Example: Anniversary on January 11, Proposal day on April 5
-        if(date.getMonth() === 0 && date.getDate() === 11) {
-          applyTheme('valentine');
-        } else if(date.getMonth() === 3 && date.getDate() === 5) {
-          applyTheme('cosmic');
-        }
+
+      // Ripple effect function
+      function createRipple(x, y) {
+        const ripple = document.createElement('div');
+        ripple.classList.add('ripple');
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 800); // Remove after animation
       }
-      detectHoliday();
-      
-      /***** Dim Animation & Thank You Message After 25 Seconds *****/
-      setTimeout(() => {
-        document.body.classList.add('dimmed');
-        const overlay = document.getElementById('thankYouOverlay');
-        overlay.style.opacity = '1';
-      }, 25000);
-      
-      /***** Floating Symbols Interval & Stars Creation *****/
-      setInterval(createSymbol, 2000);
-      createStars();
+
+      // Initialize with night theme
+      applyTheme('night');
     });
   </script>
 </body>
