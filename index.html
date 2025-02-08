@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connected Hearts - Advanced</title>
   <style>
-    /* ------------------ CSS Variables & Global Styles ------------------ */
+    /* ------------------ CSS Variables ------------------ */
     :root {
       --heart-color: #ff4b6e;
       --heart-glow: #ff8da1;
@@ -17,6 +17,7 @@
       --heart-beat-duration: 1.2s;
       --star-count: 100;
     }
+    /* ------------------ Global Reset ------------------ */
     * {
       margin: 0;
       padding: 0;
@@ -32,7 +33,7 @@
       flex-direction: column;
       background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
     }
-    /* ------------------ Theme Switcher Controls ------------------ */
+    /* ------------------ Theme Switcher ------------------ */
     .theme-switcher {
       position: fixed;
       top: 10px;
@@ -70,8 +71,17 @@
       flex: 1;
       width: 100%;
       display: flex;
-      justify-content: space-around;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+    }
+    /* ------------------ Hearts Container ------------------ */
+    .hearts-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 20px;
     }
     /* ------------------ Starry Background ------------------ */
     .stars {
@@ -94,16 +104,13 @@
       0%, 100% { opacity: 0.2; }
       50% { opacity: 1; }
     }
-    /* ------------------ Bridge Connecting Hearts ------------------ */
+    /* ------------------ Bridge ------------------ */
     .bridge {
-      position: absolute;
-      top: 50%;
-      left: 25%;
-      right: 25%;
+      position: relative;
+      width: 150px;
       height: 2px;
       background: linear-gradient(to right, var(--bridge-start), var(--bridge-end));
-      /* Using currentColor for the pseudo-element */
-      color: var(--bridge-start);
+      margin: 0 20px;
       z-index: 2;
     }
     .bridge::before {
@@ -166,13 +173,27 @@
       50% { transform: rotate(45deg) scale(1.1); }
     }
     .heart:hover { filter: brightness(1.2); }
+    /* ------------------ Love Story Timeline ------------------ */
+    #timeline {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      color: white;
+      font-size: 0.9rem;
+    }
+    .timeline-item {
+      text-align: center;
+    }
+    .timeline-item span {
+      display: block;
+    }
     /* ------------------ Message Card & Envelope Animation ------------------ */
+    /* This container is now placed below the hearts (outside of <main>) */
     .message-card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      perspective: 1000px;
+      width: 300px;
+      margin: 20px auto;
       z-index: 10;
     }
     .envelope {
@@ -185,7 +206,7 @@
     }
     .card-inner {
       position: relative;
-      width: 300px;
+      width: 100%;
       height: 200px;
       text-align: center;
       transition: transform 0.8s;
@@ -265,7 +286,6 @@
 <body aria-label="Connected Hearts Animation">
   <!-- WebGL Canvas for Fluid Background (Experimental) -->
   <canvas id="webgl-canvas" style="position: fixed; top: 0; left:0; width: 100%; height: 100%; z-index:0;"></canvas>
-
   <!-- Theme Switcher -->
   <div class="theme-switcher" role="navigation" aria-label="Theme Switcher">
     <button data-theme="day">Day</button>
@@ -273,42 +293,54 @@
     <button data-theme="valentine">Valentine</button>
     <button data-theme="cosmic">Cosmic</button>
   </div>
-
   <!-- Mini-Games Button -->
   <button class="mini-games" aria-label="Mini Games">Mini Games</button>
-
   <!-- Starry Background -->
   <div class="stars" aria-hidden="true"></div>
-
   <!-- SVG for Constellation Effect -->
   <svg id="constellation-svg"></svg>
-
-  <!-- Main Container -->
+  <!-- Main Container: Hearts and Timeline -->
   <main>
-    <!-- Left Heart -->
-    <div class="heart beating" id="leftHeart" aria-label="Left Heart"></div>
-
-    <!-- Bridge -->
-    <div class="bridge"></div>
-
-    <!-- Right Heart -->
-    <div class="heart beating" id="rightHeart" aria-label="Right Heart"></div>
-
-    <!-- Message Card with Envelope Animation -->
-    <div class="message-card">
-      <div class="envelope">
-        <div class="card-inner" id="messageCard" tabindex="0" role="button" aria-label="Message Card">
-          <div class="card-front">
-            <p>Click to reveal a message</p>
-          </div>
-          <div class="card-back">
-            <p id="messageText">Though miles apart, my heart proposes every beat. Will you make it forever?</p>
-          </div>
-        </div>
+    <div class="hearts-container">
+      <div class="heart beating" id="leftHeart" aria-label="Left Heart"></div>
+      <div class="bridge"></div>
+      <div class="heart beating" id="rightHeart" aria-label="Right Heart"></div>
+    </div>
+    <!-- Love Story Timeline (static, non-clickable) -->
+    <div id="timeline">
+      <div class="timeline-item">
+        <span class="date">First Met:<br>11-01-2022</span>
+      </div>
+      <div class="timeline-item">
+        <span class="icon">🌹</span>
+      </div>
+      <div class="timeline-item">
+        <span class="icon">💍</span>
+      </div>
+      <div class="timeline-item">
+        <span class="date">Proposal:<br>Gadhu did on<br>4-4-2022</span>
+      </div>
+      <div class="timeline-item">
+        <span class="icon">🎉</span>
+      </div>
+      <div class="timeline-item">
+        <span class="date">Anniversary:<br>11-01-2025 (3 years)</span>
       </div>
     </div>
   </main>
-
+  <!-- Envelope Message Card (below the hearts) -->
+  <div class="message-card">
+    <div class="envelope">
+      <div class="card-inner" id="messageCard" role="button" aria-label="Message Card">
+        <div class="card-front">
+          <p>Tap to reveal a message</p>
+        </div>
+        <div class="card-back">
+          <p id="messageText">Though miles apart, my heart proposes every beat.<br>Will you make it forever?</p>
+        </div>
+      </div>
+    </div>
+  </div>
   <script>
     /***** Theme Switcher *****/
     const themes = {
@@ -341,7 +373,6 @@
         '--bridge-end': '#ff8da1'
       }
     };
-
     function applyTheme(themeName) {
       const theme = themes[themeName];
       for (let key in theme) {
@@ -353,7 +384,6 @@
         applyTheme(btn.getAttribute('data-theme'));
       });
     });
-
     /***** Starry Background *****/
     function createStars() {
       const starsContainer = document.querySelector('.stars');
@@ -369,7 +399,6 @@
         starsContainer.appendChild(star);
       }
     }
-
     /***** Floating Symbols with Particle Trails *****/
     function createSymbol() {
       const symbols = ['❤️', '💍', '🌸', '✨'];
@@ -379,7 +408,6 @@
       symbol.style.left = Math.random() * 100 + '%';
       symbol.style.top = '100%';
       document.body.appendChild(symbol);
-
       const animation = symbol.animate([
         { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
         { transform: 'translateY(-100vh) rotate(360deg)', opacity: 0 }
@@ -389,7 +417,6 @@
       });
       animation.onfinish = () => symbol.remove();
     }
-
     /***** Interactive Ripples on Click *****/
     function createRipple(x, y) {
       const ripple = document.createElement('div');
@@ -406,7 +433,6 @@
     document.addEventListener('click', (e) => {
       createRipple(e.clientX, e.clientY);
     });
-
     /***** Constellation Effect: Connect Floating Symbols *****/
     function connectSymbols() {
       const svg = document.getElementById('constellation-svg');
@@ -436,7 +462,6 @@
       });
     }
     setInterval(connectSymbols, 1000);
-
     /***** Customizable Text Effects for Message *****/
     const textEffects = {
       glitter: () => {
@@ -465,50 +490,17 @@
         }, 500);
       }
     };
-    // Apply typewriter effect on card flip (example)
+    // Apply typewriter effect on envelope tap (message flip)
     document.getElementById('messageCard').addEventListener('click', () => {
+      document.getElementById('messageCard').classList.toggle('flipped');
       setTimeout(() => {
         textEffects.typewriter();
       }, 400);
     });
-
-    /***** Love Story Timeline Between Hearts *****/
-    const timelineEvents = [
-      { date: 'First Met', icon: '👋' },
-      { date: 'First Date', icon: '🌹' },
-      { date: 'Proposal', icon: '💍' },
-      { date: 'Anniversary', icon: '🎉' }
-    ];
-    function createTimeline() {
-      let timeline = document.getElementById('timeline');
-      if (!timeline) {
-        timeline = document.createElement('div');
-        timeline.id = 'timeline';
-        timeline.style.position = 'absolute';
-        timeline.style.top = '60%';
-        timeline.style.left = '50%';
-        timeline.style.transform = 'translate(-50%, 0)';
-        timeline.style.display = 'flex';
-        timeline.style.gap = '20px';
-        timeline.style.zIndex = '10';
-        document.querySelector('main').appendChild(timeline);
-      }
-      timeline.innerHTML = '';
-      timelineEvents.forEach(event => {
-        const eventDiv = document.createElement('div');
-        eventDiv.style.color = 'white';
-        eventDiv.style.textAlign = 'center';
-        eventDiv.innerHTML = `<div style="font-size:24px;">${event.icon}</div><div>${event.date}</div>`;
-        timeline.appendChild(eventDiv);
-      });
-    }
-    createTimeline();
-
     /***** WebGL Fluid Background (Experimental using Three.js) *****/
     function initWebGL() {
       const canvas = document.getElementById('webgl-canvas');
       if (!window.THREE) {
-        // Load Three.js dynamically if not already present
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
         script.onload = initWebGL;
@@ -532,7 +524,6 @@
       animate();
     }
     initWebGL();
-
     /***** Object Pooling for Particles (Simplified Example) *****/
     class Particle {
       constructor() {
@@ -585,29 +576,17 @@
       const touch = e.touches[0];
       createFirework(touch.clientX, touch.clientY);
     }, { passive: true });
-
-    /***** Accessibility Improvements *****/
-    function setupAccessibility() {
-      document.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' && document.activeElement === document.getElementById('messageCard')) {
-          document.getElementById('messageCard').classList.toggle('flipped');
-        }
-      });
-    }
-    setupAccessibility();
-
     /***** Mini-Games (Placeholders) *****/
     const miniGames = {
-      catchLove: () => { alert('Catch falling hearts game coming soon!'); },
-      matchSymbols: () => { alert('Memory matching game coming soon!'); },
-      drawHeart: () => { alert('Draw heart challenge coming soon!'); }
+      catchLove: () => { alert('Catch falling hearts game coming soon!, if you choose to stay with me forever'); },
+      matchSymbols: () => { alert('Memory matching game coming soon!, AFTER 5 YEARS'); },
+      drawHeart: () => { alert('Draw heart challenge coming soon!,AFTER 5 YEARS'); }
     };
     document.querySelector('.mini-games').addEventListener('click', () => {
       const gameNames = Object.keys(miniGames);
       const game = miniGames[gameNames[Math.floor(Math.random()*gameNames.length)]];
       game();
     });
-
     /***** Seasonal/Holiday Special Effects *****/
     function detectHoliday() {
       const date = new Date();
@@ -619,7 +598,6 @@
       }
     }
     detectHoliday();
-
     /***** Floating Symbols Interval & Stars Creation *****/
     setInterval(createSymbol, 2000);
     createStars();
