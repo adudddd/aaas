@@ -1,374 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Beating Hearts of Love</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connected Hearts</title>
   <style>
     /* CSS Variables for easy customization */
     :root {
-      --heart-color: #e60073;
-      --heart-glow: rgba(230, 0, 115, 0.7);
-      --bridge-start: #ff69b4; /* pink */
-      --bridge-end: #ffd700;   /* gold */
-      --bg-gradient-start: #4b0082; /* deep purple */
-      --bg-gradient-end: #ff1493;   /* romantic red */
-      --card-bg: rgba(255, 255, 255, 0.9);
-      --card-text-color: #333;
+      --heart-color: #ff4b6e;
+      --heart-glow: #ff8da1;
+      --bg-gradient-1: #1a0f2e;
+      --bg-gradient-2: #2d0f24;
+      --bridge-start: #ff69b4;
+      --bridge-end: #ffd700;
+      --heart-size: 100px;
+      --heart-beat-duration: 1.2s;
+      --star-count: 100;
     }
-    
-    /* Global Styles */
+
+    /* Global Reset */
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
-    
+
     html, body {
-      width: 100%;
       height: 100%;
       overflow: hidden;
-      background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Arial', sans-serif;
     }
-    
-    /* Starry Night Background */
-    .stars {
-      position: absolute;
+
+    /* Background styling */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+    }
+
+    /* Main container (using semantic <main> for clarity) */
+    main {
+      position: relative;
       width: 100%;
-      height: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    /* Starry sky background */
+    .stars {
+      position: fixed;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
+      z-index: 1;
     }
+
     .star {
       position: absolute;
       background: white;
-      width: 2px;
-      height: 2px;
       border-radius: 50%;
-      opacity: 0.8;
-      animation: twinkle 2s infinite ease-in-out;
+      animation: twinkle var(--star-duration, 3s) infinite;
+      will-change: opacity;
     }
+
     @keyframes twinkle {
-      0%, 100% { opacity: 0.8; }
-      50% { opacity: 0.3; }
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
     }
-    
-    /* Main Animation Container with 3D Perspective */
-    #animation-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      perspective: 1000px;
-    }
-    
-    /* Dual Hearts */
-    .heart {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      background: var(--heart-color);
-      transform: rotate(-45deg);
-      animation: pulse 1.5s infinite cubic-bezier(.66,.03,.33,.97);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .heart::before,
-    .heart::after {
-      content: "";
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      background: var(--heart-color);
-      border-radius: 50%;
-    }
-    .heart::before {
-      top: -25px;
-    }
-    .heart::after {
-      left: 25px;
-    }
-    .heart:hover {
-      box-shadow: 0 0 15px var(--heart-glow);
-      transform: scale(1.2) rotate(-45deg);
-    }
-    @keyframes pulse {
-      0% { transform: scale(1) rotate(-45deg); }
-      50% { transform: scale(1.1) rotate(-45deg); }
-      100% { transform: scale(1) rotate(-45deg); }
-    }
-    /* Positioning the left and right hearts */
-    .heart-left {
-      top: 40%;
-      left: 15%;
-    }
-    .heart-right {
-      top: 40%;
-      right: 15%;
-    }
-    
-    /* Connection Bridge with Animated Dotted Line */
+
+    /* Bridge connecting the hearts */
     .bridge {
       position: absolute;
       top: 50%;
-      left: 20%;
-      width: 60%;
-      height: 4px;
+      left: 25%;
+      right: 25%;
+      height: 2px;
+      background: linear-gradient(to right, var(--bridge-start), var(--bridge-end));
+      /* Set currentColor so the pseudo-element can use it */
+      color: var(--bridge-start);
+      z-index: 2;
+    }
+
+    .bridge::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      width: 100%;
+      height: 20px;
       background: repeating-linear-gradient(
         90deg,
-        var(--bridge-start),
-        var(--bridge-start) 5px,
-        var(--bridge-end) 5px,
-        var(--bridge-end) 10px
+        transparent,
+        transparent 10px,
+        currentColor 10px,
+        currentColor 20px
       );
-      animation: bridgeMove 2s linear infinite;
-      border-radius: 2px;
+      opacity: 0.3;
+      animation: bridgeFlow 2s linear infinite;
     }
-    @keyframes bridgeMove {
-      from { background-position: 0; }
-      to { background-position: 10px; }
+
+    @keyframes bridgeFlow {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 0; }
     }
-    
-    /* Floating Love Symbols on the Bridge */
-    .symbol {
+
+    /* Heart styling */
+    .heart {
+      position: relative;
+      width: var(--heart-size);
+      height: calc(var(--heart-size) * 0.9);
+      cursor: pointer;
+      /* Set a default transform so that heartbeat animation works smoothly */
+      transform: rotate(45deg) scale(1);
+      transition: filter 0.3s;
+      will-change: transform;
+    }
+
+    /* Create the heart shape using pseudo-elements */
+    .heart::before,
+    .heart::after {
+      content: '';
       position: absolute;
-      font-size: 18px;
-      animation: floatSymbol 4s linear infinite;
+      width: 50%;
+      height: 80%;
+      background: var(--heart-color);
+      border-radius: 50px 50px 0 0;
+      box-shadow: 0 0 20px var(--heart-glow);
     }
-    @keyframes floatSymbol {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
+
+    .heart::before {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) rotate(-45deg);
+      transform-origin: 0 100%;
     }
-    /* Example positions – adjust as needed */
-    .symbol.symbol-heart { left: 20%; top: -10px; }
-    .symbol.symbol-ring  { left: 45%; top: -10px; }
-    .symbol.symbol-flower { left: 70%; top: -10px; }
-    
-    /* Message Card with 3D Flip Animation */
+
+    .heart::after {
+      top: 0;
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    /* Heartbeat animation */
+    .heart.beating {
+      animation: heartbeat var(--heart-beat-duration) ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: rotate(45deg) scale(1); }
+      50% { transform: rotate(45deg) scale(1.1); }
+    }
+
+    /* Enhance hover effect without conflicting with the heartbeat */
+    .heart:hover {
+      filter: brightness(1.2);
+    }
+
+    /* Message Card (Flip Animation) */
     .message-card {
       position: absolute;
-      top: 60%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 80%;
-      max-width: 400px;
-      height: 200px;
       perspective: 1000px;
-      cursor: pointer;
+      z-index: 10;
     }
+
     .card-inner {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 300px;
+      height: 200px;
+      text-align: center;
       transition: transform 0.8s;
       transform-style: preserve-3d;
+      cursor: pointer;
     }
-    .message-card.flipped .card-inner {
+
+    /* Toggle flipped state */
+    .card-inner.flipped {
       transform: rotateY(180deg);
     }
-    .card-face {
+
+    .card-front,
+    .card-back {
       position: absolute;
       width: 100%;
       height: 100%;
-      background: var(--card-bg);
-      color: var(--card-text-color);
+      backface-visibility: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10px;
-      backface-visibility: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      font-size: 1.1rem;
       padding: 20px;
-      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
     }
-    .card-front {
-      /* Front face styling */
-    }
+
     .card-back {
       transform: rotateY(180deg);
-      animation: textFadeIn 2s forwards;
-      opacity: 0;
     }
-    @keyframes textFadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    
-    /* Fireworks Animation */
-    #fireworks {
+
+    /* Floating symbols (love icons) */
+    .symbol {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      font-size: 24px;
       pointer-events: none;
-      overflow: visible;
+      will-change: transform, opacity;
+      animation: float 3s ease-in-out infinite;
     }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.5; }
+      100% { transform: translateY(0) rotate(360deg); opacity: 0; }
+    }
+
+    /* Fireworks */
     .firework {
       position: absolute;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
-      background: #ffd700;
-      opacity: 0.8;
-      animation: explode 800ms ease-out forwards;
+      will-change: transform, opacity;
+      animation: explode 1s ease-out forwards;
     }
+
     @keyframes explode {
-      0% { transform: scale(0); opacity: 1; }
-      100% { transform: scale(3); opacity: 0; }
-    }
-    
-    /* Floating Love Notes */
-    .love-note {
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.8);
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      color: #e60073;
-      animation: floatUp 4s ease-out forwards;
-    }
-    @keyframes floatUp {
-      0% { transform: translate(-50%, 0); opacity: 1; }
-      100% { transform: translate(-50%, -100px); opacity: 0; }
-    }
-    
-    /* Responsive Adjustments */
-    @media (max-width: 600px) {
-      .heart {
-        width: 40px;
-        height: 40px;
+      0% {
+        transform: scale(1);
+        opacity: 1;
       }
-      .heart::before,
-      .heart::after {
-        width: 40px;
-        height: 40px;
-      }
-      .message-card {
-        width: 90%;
-        height: 180px;
+      100% {
+        transform: scale(30);
+        opacity: 0;
       }
     }
   </style>
 </head>
 <body>
-  <div id="animation-container">
-    <!-- Starry Sky -->
-    <div class="stars">
-      <!-- A few sample stars; add more or generate dynamically if desired -->
-      <div class="star" style="top:10%; left:20%;"></div>
-      <div class="star" style="top:30%; left:50%;"></div>
-      <div class="star" style="top:70%; left:80%;"></div>
-      <div class="star" style="top:50%; left:10%;"></div>
-      <div class="star" style="top:20%; left:70%;"></div>
-      <div class="star" style="top:85%; left:40%;"></div>
-      <div class="star" style="top:15%; left:90%;"></div>
-      <div class="star" style="top:65%; left:25%;"></div>
-      <div class="star" style="top:40%; left:60%;"></div>
-      <div class="star" style="top:75%; left:15%;"></div>
-    </div>
+  <!-- Starry background -->
+  <div class="stars"></div>
+  
+  <!-- Main content -->
+  <main>
+    <!-- Left Heart -->
+    <div class="heart beating" id="leftHeart"></div>
     
-    <!-- Dual Beating Hearts -->
-    <div class="heart heart-left" id="heartLeft"></div>
-    <div class="heart heart-right" id="heartRight"></div>
+    <!-- Bridge connecting hearts -->
+    <div class="bridge"></div>
     
-    <!-- Dynamic Connection Bridge -->
-    <div class="bridge">
-      <!-- Floating Symbols: hearts, rings, flowers -->
-      <div class="symbol symbol-heart">❤️</div>
-      <div class="symbol symbol-ring">💍</div>
-      <div class="symbol symbol-flower">🌸</div>
-    </div>
+    <!-- Right Heart -->
+    <div class="heart beating" id="rightHeart"></div>
     
-    <!-- Message Reveal Card with 3D Flip -->
-    <div class="message-card" id="messageCard">
-      <div class="card-inner">
-        <div class="card-face card-front">
-          Click to reveal your love message
+    <!-- Message Card with Flip Animation -->
+    <div class="message-card">
+      <div class="card-inner" id="messageCard">
+        <div class="card-front">
+          <p>Click to reveal a message</p>
         </div>
-        <div class="card-face card-back">
-          Though miles apart, my heart proposes every beat.<br>
-          Will you make it forever?
+        <div class="card-back">
+          <p>
+            Though miles apart, my heart proposes every beat.<br />
+            Will you make it forever?
+          </p>
         </div>
       </div>
     </div>
-    
-    <!-- Fireworks Container -->
-    <div id="fireworks"></div>
-  </div>
-  
+  </main>
+
   <script>
-    // Toggle the message card flip on click
-    const messageCard = document.getElementById('messageCard');
-    messageCard.addEventListener('click', () => {
-      messageCard.classList.toggle('flipped');
-    });
-    
-    // Function to create a fireworks effect at (x, y)
+    /* --------- Helper Functions --------- */
+
+    // Create a starry sky background by generating stars dynamically
+    function createStars() {
+      const starsContainer = document.querySelector('.stars');
+      for (let i = 0; i < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--star-count')); i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 3;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        // Set a custom duration for twinkling
+        star.style.setProperty('--star-duration', (Math.random() * 3 + 2) + 's');
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // Create floating love symbols (e.g., hearts, rings, flowers, sparkles)
+    function createSymbol() {
+      const symbols = ['❤️', '💍', '🌸', '✨'];
+      const symbol = document.createElement('div');
+      symbol.className = 'symbol';
+      symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      symbol.style.left = Math.random() * 100 + '%';
+      symbol.style.top = '100%';
+      document.body.appendChild(symbol);
+
+      // Animate symbol floating upward using the Web Animations API
+      const animation = symbol.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: 'translateY(-100vh) rotate(360deg)', opacity: 0 }
+      ], {
+        duration: 5000,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+      });
+
+      animation.onfinish = () => symbol.remove();
+    }
+
+    // Create a fireworks explosion at the given (x, y) coordinates
     function createFirework(x, y) {
-      const firework = document.createElement('div');
-      firework.classList.add('firework');
-      firework.style.left = x + 'px';
-      firework.style.top = y + 'px';
-      document.getElementById('fireworks').appendChild(firework);
-      
-      // Remove the firework element after the animation completes
-      setTimeout(() => {
-        firework.remove();
-      }, 800);
+      const colors = ['#ff4b6e', '#ffd700', '#ff69b4', '#ff8da1'];
+      for (let i = 0; i < 36; i++) {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        firework.style.left = x + 'px';
+        firework.style.top = y + 'px';
+        firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        firework.style.transform = `rotate(${i * 10}deg)`;
+        document.body.appendChild(firework);
+        // Remove firework element after animation completes
+        setTimeout(() => firework.remove(), 1000);
+      }
     }
-    
-    // Function to create a floating love note at (x, y)
-    function createLoveNote(x, y) {
-      const notes = [
-        "You are my sunshine ☀️", 
-        "Love you to the moon 🌙", 
-        "My heart beats for you 💓", 
-        "Forever yours 💕"
-      ];
-      const noteText = notes[Math.floor(Math.random() * notes.length)];
-      const note = document.createElement('div');
-      note.classList.add('love-note');
-      note.style.left = x + 'px';
-      note.style.top = y + 'px';
-      note.innerText = noteText;
-      document.getElementById('animation-container').appendChild(note);
-      
-      // Remove the love note after the animation finishes (4 seconds)
-      setTimeout(() => {
-        note.remove();
-      }, 4000);
-    }
-    
-    // Add interactive event listeners to both hearts
-    const hearts = [
-      document.getElementById('heartLeft'),
-      document.getElementById('heartRight')
-    ];
-    hearts.forEach(heart => {
-      // For mouse click
-      heart.addEventListener('click', (e) => {
-        // Calculate center of the heart
-        const rect = heart.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        createFirework(centerX, centerY);
-        createLoveNote(e.clientX, e.clientY);
+
+    /* --------- Initialization & Event Listeners --------- */
+
+    document.addEventListener('DOMContentLoaded', () => {
+      createStars();
+
+      // Set up card flip interaction
+      const messageCard = document.getElementById('messageCard');
+      messageCard.addEventListener('click', () => {
+        messageCard.classList.toggle('flipped');
       });
-      
-      // For mobile touch events
-      heart.addEventListener('touchstart', (e) => {
-        const touch = e.touches[0];
-        const rect = heart.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        createFirework(centerX, centerY);
-        createLoveNote(touch.clientX, touch.clientY);
+
+      // Set up heart click events to trigger fireworks
+      const hearts = document.querySelectorAll('.heart');
+      hearts.forEach(heart => {
+        heart.addEventListener('click', (e) => {
+          const rect = heart.getBoundingClientRect();
+          // Firework originates from the heart's center
+          createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        });
       });
+
+      // Periodically generate floating symbols
+      setInterval(createSymbol, 2000);
     });
+
+    // Enable touch events for mobile devices: create a firework at the touch position
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      createFirework(touch.clientX, touch.clientY);
+    }, { passive: true });
   </script>
 </body>
 </html>
