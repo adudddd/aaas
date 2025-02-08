@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connected Hearts - Advanced</title>
+  <title>Connected Hearts</title>
   <style>
     /* ------------------ CSS Variables ------------------ */
     :root {
@@ -356,7 +356,7 @@
     <div class="envelope">
       <div class="card-inner" id="messageCard" role="button" aria-label="Message Card">
         <div class="card-front">
-          <p>Tap to reveal a message</p>
+          <p>Tap to reveal</p>
         </div>
         <div class="card-back">
           <p id="messageText">Though miles apart, my heart proposes every beat.<br>Will you make it forever?</p>
@@ -619,9 +619,9 @@
     
     /***** Mini-Games (Placeholders) *****/
     const miniGames = {
-      catchLove: () => { alert('Catch falling hearts game coming soon!'); },
-      matchSymbols: () => { alert('Memory matching game coming soon!'); },
-      drawHeart: () => { alert('Draw heart challenge coming soon!'); }
+      catchLove: () => { alert('Catch falling hearts game coming soon!,after 1 year'); },
+      matchSymbols: () => { alert('Memory matching game coming soon! after 2 year'); },
+      drawHeart: () => { alert('Draw heart challenge coming soon!, after 3 year'); }
     };
     document.querySelector('.mini-games').addEventListener('click', () => {
       const gameNames = Object.keys(miniGames);
