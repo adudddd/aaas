@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connected Hearts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connected Hearts - Advanced</title>
   <style>
-    /* CSS Variables for easy customization */
+    /* ------------------ CSS Variables & Global Styles ------------------ */
     :root {
       --heart-color: #ff4b6e;
       --heart-glow: #ff8da1;
@@ -17,39 +17,63 @@
       --heart-beat-duration: 1.2s;
       --star-count: 100;
     }
-
-    /* Global Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     html, body {
       height: 100%;
       overflow: hidden;
       font-family: 'Arial', sans-serif;
     }
-
-    /* Background styling */
     body {
       display: flex;
-      justify-content: center;
-      align-items: center;
+      flex-direction: column;
       background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
     }
-
-    /* Main container (using semantic <main> for clarity) */
+    /* ------------------ Theme Switcher Controls ------------------ */
+    .theme-switcher {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+    }
+    .theme-switcher button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+    .theme-switcher button:focus {
+      outline: 2px solid white;
+    }
+    /* ------------------ Mini-Games Button ------------------ */
+    .mini-games {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 100;
+      padding: 10px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    /* ------------------ Main Container ------------------ */
     main {
       position: relative;
+      flex: 1;
       width: 100%;
-      height: 100vh;
       display: flex;
       justify-content: space-around;
       align-items: center;
     }
-
-    /* Starry sky background */
+    /* ------------------ Starry Background ------------------ */
     .stars {
       position: fixed;
       top: 0;
@@ -59,7 +83,6 @@
       pointer-events: none;
       z-index: 1;
     }
-
     .star {
       position: absolute;
       background: white;
@@ -67,13 +90,11 @@
       animation: twinkle var(--star-duration, 3s) infinite;
       will-change: opacity;
     }
-
     @keyframes twinkle {
       0%, 100% { opacity: 0.2; }
       50% { opacity: 1; }
     }
-
-    /* Bridge connecting the hearts */
+    /* ------------------ Bridge Connecting Hearts ------------------ */
     .bridge {
       position: absolute;
       top: 50%;
@@ -81,11 +102,10 @@
       right: 25%;
       height: 2px;
       background: linear-gradient(to right, var(--bridge-start), var(--bridge-end));
-      /* Set currentColor so the pseudo-element can use it */
+      /* Using currentColor for the pseudo-element */
       color: var(--bridge-start);
       z-index: 2;
     }
-
     .bridge::before {
       content: '';
       position: absolute;
@@ -102,25 +122,20 @@
       opacity: 0.3;
       animation: bridgeFlow 2s linear infinite;
     }
-
     @keyframes bridgeFlow {
       0% { background-position: 0 0; }
       100% { background-position: 40px 0; }
     }
-
-    /* Heart styling */
+    /* ------------------ Heart Styling ------------------ */
     .heart {
       position: relative;
       width: var(--heart-size);
       height: calc(var(--heart-size) * 0.9);
       cursor: pointer;
-      /* Set a default transform so that heartbeat animation works smoothly */
       transform: rotate(45deg) scale(1);
       transition: filter 0.3s;
       will-change: transform;
     }
-
-    /* Create the heart shape using pseudo-elements */
     .heart::before,
     .heart::after {
       content: '';
@@ -131,37 +146,27 @@
       border-radius: 50px 50px 0 0;
       box-shadow: 0 0 20px var(--heart-glow);
     }
-
     .heart::before {
       top: 0;
       left: 50%;
       transform: translateX(-50%) rotate(-45deg);
       transform-origin: 0 100%;
     }
-
     .heart::after {
       top: 0;
       left: 0;
       transform: rotate(45deg);
       transform-origin: 100% 100%;
     }
-
-    /* Heartbeat animation */
     .heart.beating {
       animation: heartbeat var(--heart-beat-duration) ease-in-out infinite;
     }
-
     @keyframes heartbeat {
       0%, 100% { transform: rotate(45deg) scale(1); }
       50% { transform: rotate(45deg) scale(1.1); }
     }
-
-    /* Enhance hover effect without conflicting with the heartbeat */
-    .heart:hover {
-      filter: brightness(1.2);
-    }
-
-    /* Message Card (Flip Animation) */
+    .heart:hover { filter: brightness(1.2); }
+    /* ------------------ Message Card & Envelope Animation ------------------ */
     .message-card {
       position: absolute;
       top: 50%;
@@ -170,7 +175,14 @@
       perspective: 1000px;
       z-index: 10;
     }
-
+    .envelope {
+      transform-style: preserve-3d;
+      animation: unfold 1.5s ease-in-out;
+    }
+    @keyframes unfold {
+      0% { transform: rotateX(90deg); opacity: 0; }
+      100% { transform: rotateX(0deg); opacity: 1; }
+    }
     .card-inner {
       position: relative;
       width: 300px;
@@ -180,14 +192,8 @@
       transform-style: preserve-3d;
       cursor: pointer;
     }
-
-    /* Toggle flipped state */
-    .card-inner.flipped {
-      transform: rotateY(180deg);
-    }
-
-    .card-front,
-    .card-back {
+    .card-inner.flipped { transform: rotateY(180deg); }
+    .card-front, .card-back {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -196,18 +202,14 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       backdrop-filter: blur(5px);
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255,255,255,0.2);
       color: white;
     }
-
-    .card-back {
-      transform: rotateY(180deg);
-    }
-
-    /* Floating symbols (love icons) */
+    .card-back { transform: rotateY(180deg); }
+    /* ------------------ Floating Symbols & Particle Trails ------------------ */
     .symbol {
       position: absolute;
       font-size: 24px;
@@ -215,70 +217,144 @@
       will-change: transform, opacity;
       animation: float 3s ease-in-out infinite;
     }
-
+    .symbol::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 10px;
+      background: linear-gradient(to top, rgba(255,255,255,0.5), transparent);
+      opacity: 0.7;
+      filter: blur(2px);
+    }
     @keyframes float {
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       50% { transform: translateY(-20px) rotate(180deg); opacity: 0.5; }
       100% { transform: translateY(0) rotate(360deg); opacity: 0; }
     }
-
-    /* Fireworks */
-    .firework {
+    /* ------------------ Interactive Ripples ------------------ */
+    .ripple {
       position: absolute;
-      width: 4px;
-      height: 4px;
       border-radius: 50%;
-      will-change: transform, opacity;
-      animation: explode 1s ease-out forwards;
+      background: rgba(255,255,255,0.3);
+      transform: scale(0);
+      animation: rippleEffect 0.8s linear forwards;
+      pointer-events: none;
     }
-
-    @keyframes explode {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(30);
-        opacity: 0;
-      }
+    @keyframes rippleEffect {
+      to { transform: scale(4); opacity: 0; }
+    }
+    /* ------------------ Constellation SVG ------------------ */
+    #constellation-svg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+    /* ------------------ Accessibility: High Contrast ------------------ */
+    .high-contrast {
+      filter: contrast(1.5);
     }
   </style>
 </head>
-<body>
-  <!-- Starry background -->
-  <div class="stars"></div>
-  
-  <!-- Main content -->
+<body aria-label="Connected Hearts Animation">
+  <!-- WebGL Canvas for Fluid Background (Experimental) -->
+  <canvas id="webgl-canvas" style="position: fixed; top: 0; left:0; width: 100%; height: 100%; z-index:0;"></canvas>
+
+  <!-- Theme Switcher -->
+  <div class="theme-switcher" role="navigation" aria-label="Theme Switcher">
+    <button data-theme="day">Day</button>
+    <button data-theme="night">Night</button>
+    <button data-theme="valentine">Valentine</button>
+    <button data-theme="cosmic">Cosmic</button>
+  </div>
+
+  <!-- Mini-Games Button -->
+  <button class="mini-games" aria-label="Mini Games">Mini Games</button>
+
+  <!-- Starry Background -->
+  <div class="stars" aria-hidden="true"></div>
+
+  <!-- SVG for Constellation Effect -->
+  <svg id="constellation-svg"></svg>
+
+  <!-- Main Container -->
   <main>
     <!-- Left Heart -->
-    <div class="heart beating" id="leftHeart"></div>
-    
-    <!-- Bridge connecting hearts -->
+    <div class="heart beating" id="leftHeart" aria-label="Left Heart"></div>
+
+    <!-- Bridge -->
     <div class="bridge"></div>
-    
+
     <!-- Right Heart -->
-    <div class="heart beating" id="rightHeart"></div>
-    
-    <!-- Message Card with Flip Animation -->
+    <div class="heart beating" id="rightHeart" aria-label="Right Heart"></div>
+
+    <!-- Message Card with Envelope Animation -->
     <div class="message-card">
-      <div class="card-inner" id="messageCard">
-        <div class="card-front">
-          <p>Click to reveal a message</p>
-        </div>
-        <div class="card-back">
-          <p>
-            Though miles apart, my heart proposes every beat.<br />
-            Will you make it forever?
-          </p>
+      <div class="envelope">
+        <div class="card-inner" id="messageCard" tabindex="0" role="button" aria-label="Message Card">
+          <div class="card-front">
+            <p>Click to reveal a message</p>
+          </div>
+          <div class="card-back">
+            <p id="messageText">Though miles apart, my heart proposes every beat. Will you make it forever?</p>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
   <script>
-    /* --------- Helper Functions --------- */
+    /***** Theme Switcher *****/
+    const themes = {
+      day: {
+        '--heart-color': '#ff4b6e',
+        '--bg-gradient-1': '#87cefa',
+        '--bg-gradient-2': '#f0e68c',
+        '--bridge-start': '#ff69b4',
+        '--bridge-end': '#ffd700'
+      },
+      night: {
+        '--heart-color': '#ff4b6e',
+        '--bg-gradient-1': '#1a0f2e',
+        '--bg-gradient-2': '#2d0f24',
+        '--bridge-start': '#ff69b4',
+        '--bridge-end': '#ffd700'
+      },
+      valentine: {
+        '--heart-color': '#ff4b6e',
+        '--bg-gradient-1': '#1a0f2e',
+        '--bg-gradient-2': '#2d0f24',
+        '--bridge-start': '#ff69b4',
+        '--bridge-end': '#ffd700'
+      },
+      cosmic: {
+        '--heart-color': '#ad7cff',
+        '--bg-gradient-1': '#0f1a2e',
+        '--bg-gradient-2': '#222',
+        '--bridge-start': '#7b2cbf',
+        '--bridge-end': '#ff8da1'
+      }
+    };
 
-    // Create a starry sky background by generating stars dynamically
+    function applyTheme(themeName) {
+      const theme = themes[themeName];
+      for (let key in theme) {
+        document.documentElement.style.setProperty(key, theme[key]);
+      }
+    }
+    document.querySelectorAll('.theme-switcher button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        applyTheme(btn.getAttribute('data-theme'));
+      });
+    });
+
+    /***** Starry Background *****/
     function createStars() {
       const starsContainer = document.querySelector('.stars');
       for (let i = 0; i < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--star-count')); i++) {
@@ -289,13 +365,12 @@
         star.style.height = size + 'px';
         star.style.left = Math.random() * 100 + '%';
         star.style.top = Math.random() * 100 + '%';
-        // Set a custom duration for twinkling
         star.style.setProperty('--star-duration', (Math.random() * 3 + 2) + 's');
         starsContainer.appendChild(star);
       }
     }
 
-    // Create floating love symbols (e.g., hearts, rings, flowers, sparkles)
+    /***** Floating Symbols with Particle Trails *****/
     function createSymbol() {
       const symbols = ['❤️', '💍', '🌸', '✨'];
       const symbol = document.createElement('div');
@@ -305,7 +380,6 @@
       symbol.style.top = '100%';
       document.body.appendChild(symbol);
 
-      // Animate symbol floating upward using the Web Animations API
       const animation = symbol.animate([
         { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
         { transform: 'translateY(-100vh) rotate(360deg)', opacity: 0 }
@@ -313,56 +387,242 @@
         duration: 5000,
         easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
       });
-
       animation.onfinish = () => symbol.remove();
     }
 
-    // Create a fireworks explosion at the given (x, y) coordinates
+    /***** Interactive Ripples on Click *****/
+    function createRipple(x, y) {
+      const ripple = document.createElement('div');
+      ripple.classList.add('ripple');
+      ripple.style.left = (x - 25) + 'px';
+      ripple.style.top = (y - 25) + 'px';
+      ripple.style.width = '50px';
+      ripple.style.height = '50px';
+      document.body.appendChild(ripple);
+      ripple.addEventListener('animationend', () => {
+        ripple.remove();
+      });
+    }
+    document.addEventListener('click', (e) => {
+      createRipple(e.clientX, e.clientY);
+    });
+
+    /***** Constellation Effect: Connect Floating Symbols *****/
+    function connectSymbols() {
+      const svg = document.getElementById('constellation-svg');
+      svg.innerHTML = ''; // Clear previous lines
+      const symbols = document.querySelectorAll('.symbol');
+      const threshold = 150;
+      symbols.forEach(sym1 => {
+        const rect1 = sym1.getBoundingClientRect();
+        symbols.forEach(sym2 => {
+          if (sym1 === sym2) return;
+          const rect2 = sym2.getBoundingClientRect();
+          const dx = rect1.left - rect2.left;
+          const dy = rect1.top - rect2.top;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < threshold) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', rect1.left + rect1.width / 2);
+            line.setAttribute('y1', rect1.top + rect1.height / 2);
+            line.setAttribute('x2', rect2.left + rect2.width / 2);
+            line.setAttribute('y2', rect2.top + rect2.height / 2);
+            line.setAttribute('stroke', 'white');
+            line.setAttribute('stroke-width', '1');
+            line.setAttribute('stroke-opacity', (1 - dist / threshold).toString());
+            svg.appendChild(line);
+          }
+        });
+      });
+    }
+    setInterval(connectSymbols, 1000);
+
+    /***** Customizable Text Effects for Message *****/
+    const textEffects = {
+      glitter: () => {
+        const message = document.getElementById('messageText');
+        message.style.backgroundImage = 'linear-gradient(90deg, #fff, #ff0, #fff)';
+        message.style.backgroundSize = '200%';
+        message.style.animation = 'glitter 2s infinite';
+      },
+      typewriter: () => {
+        const message = document.getElementById('messageText');
+        const text = message.textContent;
+        message.textContent = '';
+        let i = 0;
+        const interval = setInterval(() => {
+          message.textContent += text.charAt(i);
+          i++;
+          if(i === text.length) clearInterval(interval);
+        }, 50);
+      },
+      fadeInOut: () => {
+        const message = document.getElementById('messageText');
+        message.style.opacity = 0;
+        setTimeout(() => {
+          message.style.transition = 'opacity 1s';
+          message.style.opacity = 1;
+        }, 500);
+      }
+    };
+    // Apply typewriter effect on card flip (example)
+    document.getElementById('messageCard').addEventListener('click', () => {
+      setTimeout(() => {
+        textEffects.typewriter();
+      }, 400);
+    });
+
+    /***** Love Story Timeline Between Hearts *****/
+    const timelineEvents = [
+      { date: 'First Met', icon: '👋' },
+      { date: 'First Date', icon: '🌹' },
+      { date: 'Proposal', icon: '💍' },
+      { date: 'Anniversary', icon: '🎉' }
+    ];
+    function createTimeline() {
+      let timeline = document.getElementById('timeline');
+      if (!timeline) {
+        timeline = document.createElement('div');
+        timeline.id = 'timeline';
+        timeline.style.position = 'absolute';
+        timeline.style.top = '60%';
+        timeline.style.left = '50%';
+        timeline.style.transform = 'translate(-50%, 0)';
+        timeline.style.display = 'flex';
+        timeline.style.gap = '20px';
+        timeline.style.zIndex = '10';
+        document.querySelector('main').appendChild(timeline);
+      }
+      timeline.innerHTML = '';
+      timelineEvents.forEach(event => {
+        const eventDiv = document.createElement('div');
+        eventDiv.style.color = 'white';
+        eventDiv.style.textAlign = 'center';
+        eventDiv.innerHTML = `<div style="font-size:24px;">${event.icon}</div><div>${event.date}</div>`;
+        timeline.appendChild(eventDiv);
+      });
+    }
+    createTimeline();
+
+    /***** WebGL Fluid Background (Experimental using Three.js) *****/
+    function initWebGL() {
+      const canvas = document.getElementById('webgl-canvas');
+      if (!window.THREE) {
+        // Load Three.js dynamically if not already present
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+        script.onload = initWebGL;
+        document.head.appendChild(script);
+        return;
+      }
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      const geometry = new THREE.PlaneGeometry(20, 20, 32, 32);
+      const material = new THREE.MeshBasicMaterial({ color: 0xff4b6e, wireframe: true });
+      const plane = new THREE.Mesh(geometry, material);
+      scene.add(plane);
+      camera.position.z = 5;
+      function animate() {
+        requestAnimationFrame(animate);
+        plane.rotation.z += 0.005;
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+    initWebGL();
+
+    /***** Object Pooling for Particles (Simplified Example) *****/
+    class Particle {
+      constructor() {
+        this.el = document.createElement('div');
+        this.el.className = 'firework';
+      }
+      init(x, y, color) {
+        this.el.style.left = x + 'px';
+        this.el.style.top = y + 'px';
+        this.el.style.backgroundColor = color;
+        this.el.style.transform = `rotate(0deg) scale(1)`;
+        document.body.appendChild(this.el);
+        this.animate();
+      }
+      animate() {
+        this.el.animate([
+          { transform: 'scale(1)', opacity: 1 },
+          { transform: 'scale(30)', opacity: 0 }
+        ], { duration: 1000, easing: 'ease-out' });
+        setTimeout(() => { this.el.remove(); }, 1000);
+      }
+    }
+    class ParticlePool {
+      constructor(size) {
+        this.particles = Array(size).fill().map(() => new Particle());
+        this.index = 0;
+      }
+      getParticle(x, y, color) {
+        const particle = this.particles[this.index];
+        particle.init(x, y, color);
+        this.index = (this.index + 1) % this.particles.length;
+      }
+    }
+    const particlePool = new ParticlePool(50);
+    /***** Fireworks Using Particle Pool *****/
     function createFirework(x, y) {
       const colors = ['#ff4b6e', '#ffd700', '#ff69b4', '#ff8da1'];
       for (let i = 0; i < 36; i++) {
-        const firework = document.createElement('div');
-        firework.className = 'firework';
-        firework.style.left = x + 'px';
-        firework.style.top = y + 'px';
-        firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        firework.style.transform = `rotate(${i * 10}deg)`;
-        document.body.appendChild(firework);
-        // Remove firework element after animation completes
-        setTimeout(() => firework.remove(), 1000);
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particlePool.getParticle(x, y, color);
       }
     }
-
-    /* --------- Initialization & Event Listeners --------- */
-
-    document.addEventListener('DOMContentLoaded', () => {
-      createStars();
-
-      // Set up card flip interaction
-      const messageCard = document.getElementById('messageCard');
-      messageCard.addEventListener('click', () => {
-        messageCard.classList.toggle('flipped');
+    document.querySelectorAll('.heart').forEach(heart => {
+      heart.addEventListener('click', () => {
+        const rect = heart.getBoundingClientRect();
+        createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
       });
-
-      // Set up heart click events to trigger fireworks
-      const hearts = document.querySelectorAll('.heart');
-      hearts.forEach(heart => {
-        heart.addEventListener('click', (e) => {
-          const rect = heart.getBoundingClientRect();
-          // Firework originates from the heart's center
-          createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
-        });
-      });
-
-      // Periodically generate floating symbols
-      setInterval(createSymbol, 2000);
     });
-
-    // Enable touch events for mobile devices: create a firework at the touch position
     document.addEventListener('touchstart', (e) => {
       const touch = e.touches[0];
       createFirework(touch.clientX, touch.clientY);
     }, { passive: true });
+
+    /***** Accessibility Improvements *****/
+    function setupAccessibility() {
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' && document.activeElement === document.getElementById('messageCard')) {
+          document.getElementById('messageCard').classList.toggle('flipped');
+        }
+      });
+    }
+    setupAccessibility();
+
+    /***** Mini-Games (Placeholders) *****/
+    const miniGames = {
+      catchLove: () => { alert('Catch falling hearts game coming soon!'); },
+      matchSymbols: () => { alert('Memory matching game coming soon!'); },
+      drawHeart: () => { alert('Draw heart challenge coming soon!'); }
+    };
+    document.querySelector('.mini-games').addEventListener('click', () => {
+      const gameNames = Object.keys(miniGames);
+      const game = miniGames[gameNames[Math.floor(Math.random()*gameNames.length)]];
+      game();
+    });
+
+    /***** Seasonal/Holiday Special Effects *****/
+    function detectHoliday() {
+      const date = new Date();
+      // Example: Anniversary on January 11, Proposal day on April 5
+      if(date.getMonth() === 0 && date.getDate() === 11) {
+        applyTheme('valentine');
+      } else if(date.getMonth() === 3 && date.getDate() === 5) {
+        applyTheme('cosmic');
+      }
+    }
+    detectHoliday();
+
+    /***** Floating Symbols Interval & Stars Creation *****/
+    setInterval(createSymbol, 2000);
+    createStars();
   </script>
 </body>
 </html>
