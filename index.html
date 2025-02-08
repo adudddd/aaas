@@ -32,6 +32,10 @@
       display: flex;
       flex-direction: column;
       background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+      transition: filter 1s;
+    }
+    body.dimmed {
+      filter: brightness(0.5);
     }
     /* ------------------ Theme Switcher ------------------ */
     .theme-switcher {
@@ -182,6 +186,7 @@
       margin-bottom: 20px;
       color: white;
       font-size: 0.9rem;
+      cursor: pointer;
     }
     .timeline-item {
       text-align: center;
@@ -190,7 +195,6 @@
       display: block;
     }
     /* ------------------ Message Card & Envelope Animation ------------------ */
-    /* This container is now placed below the hearts (outside of <main>) */
     .message-card {
       width: 300px;
       margin: 20px auto;
@@ -277,15 +281,29 @@
       pointer-events: none;
       z-index: 5;
     }
-    /* ------------------ Accessibility: High Contrast ------------------ */
-    .high-contrast {
-      filter: contrast(1.5);
+    /* ------------------ Thank You Overlay ------------------ */
+    #thankYouOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      opacity: 0;
+      transition: opacity 1s;
+      z-index: 300;
     }
   </style>
 </head>
 <body aria-label="Connected Hearts Animation">
   <!-- WebGL Canvas for Fluid Background (Experimental) -->
   <canvas id="webgl-canvas" style="position: fixed; top: 0; left:0; width: 100%; height: 100%; z-index:0;"></canvas>
+  
   <!-- Theme Switcher -->
   <div class="theme-switcher" role="navigation" aria-label="Theme Switcher">
     <button data-theme="day">Day</button>
@@ -293,12 +311,16 @@
     <button data-theme="valentine">Valentine</button>
     <button data-theme="cosmic">Cosmic</button>
   </div>
+  
   <!-- Mini-Games Button -->
   <button class="mini-games" aria-label="Mini Games">Mini Games</button>
+  
   <!-- Starry Background -->
   <div class="stars" aria-hidden="true"></div>
+  
   <!-- SVG for Constellation Effect -->
   <svg id="constellation-svg"></svg>
+  
   <!-- Main Container: Hearts and Timeline -->
   <main>
     <div class="hearts-container">
@@ -306,7 +328,7 @@
       <div class="bridge"></div>
       <div class="heart beating" id="rightHeart" aria-label="Right Heart"></div>
     </div>
-    <!-- Love Story Timeline (static, non-clickable) -->
+    <!-- Love Story Timeline (clickable to open envelope) -->
     <div id="timeline">
       <div class="timeline-item">
         <span class="date">First Met:<br>11-01-2022</span>
@@ -328,6 +350,7 @@
       </div>
     </div>
   </main>
+  
   <!-- Envelope Message Card (below the hearts) -->
   <div class="message-card">
     <div class="envelope">
@@ -341,6 +364,10 @@
       </div>
     </div>
   </div>
+  
+  <!-- Thank You Overlay (hidden until dimmed) -->
+  <div id="thankYouOverlay">Thank you for everything ❤️</div>
+  
   <script>
     /***** Theme Switcher *****/
     const themes = {
@@ -384,6 +411,7 @@
         applyTheme(btn.getAttribute('data-theme'));
       });
     });
+    
     /***** Starry Background *****/
     function createStars() {
       const starsContainer = document.querySelector('.stars');
@@ -399,6 +427,7 @@
         starsContainer.appendChild(star);
       }
     }
+    
     /***** Floating Symbols with Particle Trails *****/
     function createSymbol() {
       const symbols = ['❤️', '💍', '🌸', '✨'];
@@ -417,6 +446,7 @@
       });
       animation.onfinish = () => symbol.remove();
     }
+    
     /***** Interactive Ripples on Click *****/
     function createRipple(x, y) {
       const ripple = document.createElement('div');
@@ -433,6 +463,7 @@
     document.addEventListener('click', (e) => {
       createRipple(e.clientX, e.clientY);
     });
+    
     /***** Constellation Effect: Connect Floating Symbols *****/
     function connectSymbols() {
       const svg = document.getElementById('constellation-svg');
@@ -462,6 +493,7 @@
       });
     }
     setInterval(connectSymbols, 1000);
+    
     /***** Customizable Text Effects for Message *****/
     const textEffects = {
       glitter: () => {
@@ -490,13 +522,19 @@
         }, 500);
       }
     };
-    // Apply typewriter effect on envelope tap (message flip)
+    
+    /***** Envelope & Timeline: Click to Flip Message Card *****/
+    // Clicking the envelope (message card) triggers the flip & typewriter effect.
     document.getElementById('messageCard').addEventListener('click', () => {
       document.getElementById('messageCard').classList.toggle('flipped');
-      setTimeout(() => {
-        textEffects.typewriter();
-      }, 400);
+      setTimeout(() => { textEffects.typewriter(); }, 400);
     });
+    // Clicking the timeline also triggers the envelope flip.
+    document.getElementById('timeline').addEventListener('click', () => {
+      document.getElementById('messageCard').classList.toggle('flipped');
+      setTimeout(() => { textEffects.typewriter(); }, 400);
+    });
+    
     /***** WebGL Fluid Background (Experimental using Three.js) *****/
     function initWebGL() {
       const canvas = document.getElementById('webgl-canvas');
@@ -524,6 +562,7 @@
       animate();
     }
     initWebGL();
+    
     /***** Object Pooling for Particles (Simplified Example) *****/
     class Particle {
       constructor() {
@@ -558,6 +597,7 @@
       }
     }
     const particlePool = new ParticlePool(50);
+    
     /***** Fireworks Using Particle Pool *****/
     function createFirework(x, y) {
       const colors = ['#ff4b6e', '#ffd700', '#ff69b4', '#ff8da1'];
@@ -576,17 +616,19 @@
       const touch = e.touches[0];
       createFirework(touch.clientX, touch.clientY);
     }, { passive: true });
+    
     /***** Mini-Games (Placeholders) *****/
     const miniGames = {
-      catchLove: () => { alert('Catch falling hearts game coming soon!, if you choose to stay with me forever'); },
-      matchSymbols: () => { alert('Memory matching game coming soon!, AFTER 5 YEARS'); },
-      drawHeart: () => { alert('Draw heart challenge coming soon!,AFTER 5 YEARS'); }
+      catchLove: () => { alert('Catch falling hearts game coming soon!'); },
+      matchSymbols: () => { alert('Memory matching game coming soon!'); },
+      drawHeart: () => { alert('Draw heart challenge coming soon!'); }
     };
     document.querySelector('.mini-games').addEventListener('click', () => {
       const gameNames = Object.keys(miniGames);
       const game = miniGames[gameNames[Math.floor(Math.random()*gameNames.length)]];
       game();
     });
+    
     /***** Seasonal/Holiday Special Effects *****/
     function detectHoliday() {
       const date = new Date();
@@ -598,6 +640,14 @@
       }
     }
     detectHoliday();
+    
+    /***** Dim Animation & Thank You Message After 15 Seconds *****/
+    setTimeout(() => {
+      document.body.classList.add('dimmed');
+      const overlay = document.getElementById('thankYouOverlay');
+      overlay.style.opacity = '1';
+    }, 15000);
+    
     /***** Floating Symbols Interval & Stars Creation *****/
     setInterval(createSymbol, 2000);
     createStars();
